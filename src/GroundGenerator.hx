@@ -11,6 +11,7 @@ class GroundGenerator
 	public function generate()
 	{		
 		ground = [for(x in 0...200) [for (y in 0...200) new Ground(0,0)]];
+		// Generate ground tiles
 		for (x in 0...200)
 		{
 			for (y in 0...200)

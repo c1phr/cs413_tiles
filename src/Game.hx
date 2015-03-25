@@ -62,6 +62,7 @@ class Game extends Sprite{
 		if(character.x >= sWidth){			
 			map.x -= sWidth;
 			character.x = 0;
+			// If in sector (1,0), display the menu
 			if (getSectorX() == 1 && getSectorY() == 0)
 			{
 				createMenu();
@@ -74,6 +75,7 @@ class Game extends Sprite{
 		else if(character.x < 0 ){
 			map.x += sWidth;
 			character.x += sWidth;
+			// If in sector (1,0), display the menu
 			if (getSectorX() == 1 && getSectorY() == 0)
 			{
 				createMenu();
@@ -87,6 +89,7 @@ class Game extends Sprite{
 		if(character.y >= sHeight){
 			map.y -= sHeight;
 			character.y -= sHeight;
+			// If in sector (1,0), display the menu
 			if (getSectorX() == 1 && getSectorY() == 0)
 			{
 				createMenu();
@@ -99,6 +102,7 @@ class Game extends Sprite{
 		else if(character.y < 0){
 			map.y += sHeight;
 			character.y += sHeight;
+			// If in sector (1,0), display the menu
 			if (getSectorX() == 1 && getSectorY() == 0)
 			{
 				createMenu();
@@ -128,6 +132,12 @@ class Game extends Sprite{
 		playGameArrow = null;
 	}
 
+	// Sector helpers: Full game world starts at sector (0,0) in the top left corner
+	// Each chunk of the map that fits on the screen at once is called a "sector"
+	// Bottom right sector is (4,4), going beyond 4 or into negative numbers is 
+	// Outside the boundaries of the world
+
+	// Get the pixel offset of a sector in order to move the map
 	private function getSectorOffset(sectorNum:Int, horz:Bool):Int
 	{
 		var sWidth:Int = Starling.current.stage.stageWidth;
@@ -139,11 +149,14 @@ class Game extends Sprite{
 		return -(sectorNum * sHeight);
 	}
 
+
+	// Return the x sector the player is in
 	private function getSectorX():Int
 	{		
 		return Std.int(-(map.x) / Starling.current.stage.stageWidth);			
 	}
 
+	// Return the y sector the player is in
 	private function getSectorY():Int
 	{		
 		return Std.int(-(map.y) / Starling.current.stage.stageHeight);
