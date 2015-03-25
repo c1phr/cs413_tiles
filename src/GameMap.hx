@@ -1,6 +1,6 @@
 import starling.display.Sprite;
 
-class Map2 extends Sprite{
+class GameMap extends Sprite{
 	public function new(){
 		super();
 	}

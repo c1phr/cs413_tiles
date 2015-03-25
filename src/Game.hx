@@ -12,7 +12,7 @@ class Game extends Sprite{
   	public var windowx:Float;
   	public var windoxy:Float;
   	public var groundGen:GroundGenerator;
-  	public var map:Map2;
+  	public var map:GameMap;
 
   	public var playGameArrow:Image;
 
@@ -28,7 +28,7 @@ class Game extends Sprite{
 	public function start(){		
 		groundGen = new GroundGenerator();
 		groundGen.generate();
-		map = new Map2();
+		map = new GameMap();
 
 		for (x in 0...50)
 		{
