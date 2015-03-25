@@ -22,7 +22,7 @@ class Root extends Sprite {
 			if (ratio == 1) {
 				// fade the loading screen, start game
 				Starling.juggler.tween(startup.loadingBitmap, 1.0, {
-					transition:Transitions.EASE_OUT, delay:3, alpha: 0, onComplete: function() {
+					transition:Transitions.EASE_OUT, alpha: 0, onComplete: function() {
 						startup.removeChild(startup.loadingBitmap);
 						var game = new Game(rootSprite);
 						game.start();
