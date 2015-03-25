@@ -13,6 +13,7 @@ class Root extends Sprite {
 	
 	public function start(startup:Startup) {
 		assets = new AssetManager();
+		assets.enqueue("assets/grass.png");
 		
 		assets.loadQueue(function onProgress(ratio:Float) {
 			if (ratio == 1) {
