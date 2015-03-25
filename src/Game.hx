@@ -16,7 +16,8 @@ class Game extends Sprite{
   	public var map:GameMap;
 	
 	private var objects : Array<Image>; // array of in-game objects (ground...)
-	private var babies : Array<Baby>; // array of babies
+	private var babies : Array<Baby>; // array of babies	
+	private var items: List<Item>;
 	
   	public var playGameArrow:Image;
 
@@ -31,6 +32,7 @@ class Game extends Sprite{
 	public function new(currentSprite:Sprite){
 		super();
 		this.currentSprite = currentSprite;
+		this.items = new List<Item>();
 	}
 
 	public function start(){		
@@ -48,7 +50,7 @@ class Game extends Sprite{
 			}
 		}
 
-		map.x = getSectorOffset(1, true);
+		map.x = -getSectorOffset(1, true);
 		currentSprite.addChild(map);
 	    character = new Image(Root.assets.getTexture('character'));
 	    character.x = charX;
@@ -61,77 +63,46 @@ class Game extends Sprite{
 		map.addChild(objectiveHeader);
 
 
+
+	    
+	    //this.items.add(new Item(this.currentSprite, "dummy-item", 50, 50));
+
 	    Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDown);
 		currentSprite.addEventListener(EnterFrameEvent.ENTER_FRAME, frameUpdate);
 
 	}
 
 	private function frameUpdate(event:EnterFrameEvent){
+		var sWidth = Starling.current.stage.stageWidth;
+		var sHeight = Starling.current.stage.stageHeight;
 		if(character.x >= sWidth){			
 			map.x -= sWidth;
 			character.x = 0;
-			// If in sector (1,0), display the menu
-			if (getSectorX() == 1 && getSectorY() == 0)
-			{
-				createMenu();
-			}
-			else
-			{
-				destroyMenu();
-			}
 		}
 		else if(character.x < 0 ){
 			map.x += sWidth;
 			character.x += sWidth;
-			// If in sector (1,0), display the menu
-			if (getSectorX() == 1 && getSectorY() == 0)
-			{
-				createMenu();
-			}
-			else
-			{
-				destroyMenu();
-			}
 		}
 
 		if(character.y >= sHeight){
 			map.y -= sHeight;
 			character.y -= sHeight;
-			// If in sector (1,0), display the menu
-			if (getSectorX() == 1 && getSectorY() == 0)
-			{
-				createMenu();
-			}
-			else
-			{
-				destroyMenu();
-			}
 		}
 		else if(character.y < 0){
 			map.y += sHeight;
-			character.y += sHeight;
-			// If in sector (1,0), display the menu
-			if (getSectorX() == 1 && getSectorY() == 0)
-			{
-				createMenu();
-
-			}
-			else
-			{
-				destroyMenu();
-			}
-
+			character.y += sHeight;			
 		}
 
 	}
 
 	private function createMenu()
 	{
-
+		var sWidth:Int = Starling.current.stage.stageWidth;
+		var sHeight:Int = Starling.current.stage.stageHeight;
 		this.playGameArrow = new Image(Root.assets.getTexture('white-arrow'));
-		this.playGameArrow.x = sWidth - playGameArrow.width;
-		this.playGameArrow.y = Std.int(sHeight/2);
-		currentSprite.addChild(playGameArrow);
+		this.playGameArrow.x = getSectorOffset(1, true) + (sWidth - this.playGameArrow.width);
+		this.playGameArrow.y = getSectorYCenter(0, this.playGameArrow.height);
+		map.addChild(playGameArrow);
 	}
 
 	private function ObjectiveMenuText(method:String){
@@ -147,13 +118,7 @@ class Game extends Sprite{
 		}
 
 
-	}
-
-	private function destroyMenu()
-	{
-		currentSprite.removeChild(this.playGameArrow);
-		playGameArrow = null;
-	}
+	}	
 
 	// Sector helpers: Full game world starts at sector (0,0) in the top left corner
 	// Each chunk of the map that fits on the screen at once is called a "sector"
@@ -165,9 +130,9 @@ class Game extends Sprite{
 	{
 		if (horz)
 		{
-			return -(sectorNum * sWidth);
+			return (sectorNum * sWidth);
 		}
-		return -(sectorNum * sHeight);
+		return (sectorNum * sHeight);
 	}
 
 
