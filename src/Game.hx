@@ -14,6 +14,8 @@ class Game extends Sprite{
   	public var groundGen:GroundGenerator;
   	public var map:Map2;
 
+  	public var playGameArrow:Image;
+
   	//Current coords for characters
   	var charX:Float = 10;
   	var charY:Float = 10;
@@ -38,12 +40,13 @@ class Game extends Sprite{
 			}
 		}
 
-		map.x = sectorCalc(1, true);
+		map.x = getSectorOffset(1, true);
 		currentSprite.addChild(map);
 	    character = new Image(Root.assets.getTexture('character'));
 	    character.x = charX;
 	    character.y = charY;
 	    currentSprite.addChild(character);
+	    createMenu();
 
 	    Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDown);
 		currentSprite.addEventListener(EnterFrameEvent.ENTER_FRAME, frameUpdate);
@@ -56,25 +59,73 @@ class Game extends Sprite{
 		if(character.x >= sWidth){			
 			map.x -= sWidth;
 			character.x = 0;
+			if (getSectorX() == 1 && getSectorY() == 0)
+			{
+				createMenu();
+			}
+			else
+			{
+				destroyMenu();
+			}
 		}
 		else if(character.x < 0 ){
 			map.x += sWidth;
 			character.x += sWidth;
+			if (getSectorX() == 1 && getSectorY() == 0)
+			{
+				createMenu();
+			}
+			else
+			{
+				destroyMenu();
+			}
 		}
 
 		if(character.y >= sHeight){
 			map.y -= sHeight;
 			character.y -= sHeight;
+			if (getSectorX() == 1 && getSectorY() == 0)
+			{
+				createMenu();
+			}
+			else
+			{
+				destroyMenu();
+			}
 		}
 		else if(character.y < 0){
 			map.y += sHeight;
 			character.y += sHeight;
+			if (getSectorX() == 1 && getSectorY() == 0)
+			{
+				createMenu();
+			}
+			else
+			{
+				destroyMenu();
+			}
 		}
 
 
 	}
 
-	private function sectorCalc(sectorNum:Int, horz:Bool):Int
+	private function createMenu()
+	{
+		var sWidth:Int = Starling.current.stage.stageWidth;
+		var sHeight:Int = Starling.current.stage.stageHeight;
+		this.playGameArrow = new Image(Root.assets.getTexture('white-arrow'));
+		this.playGameArrow.x = sWidth - playGameArrow.width;
+		this.playGameArrow.y = Std.int(sHeight/2);
+		currentSprite.addChild(playGameArrow);
+	}
+
+	private function destroyMenu()
+	{
+		currentSprite.removeChild(this.playGameArrow);
+		playGameArrow = null;
+	}
+
+	private function getSectorOffset(sectorNum:Int, horz:Bool):Int
 	{
 		var sWidth:Int = Starling.current.stage.stageWidth;
 		var sHeight:Int = Starling.current.stage.stageHeight;
@@ -83,6 +134,16 @@ class Game extends Sprite{
 			return -(sectorNum * sWidth);
 		}
 		return -(sectorNum * sHeight);
+	}
+
+	private function getSectorX():Int
+	{
+		return Std.int(Math.abs(map.x) / Starling.current.stage.stageWidth);			
+	}
+
+	private function getSectorY():Int
+	{
+		return Std.int(Math.abs(map.y) / Starling.current.stage.stageHeight);
 	}
 
 	private function keyDown(event:KeyboardEvent){
