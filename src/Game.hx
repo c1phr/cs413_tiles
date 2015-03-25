@@ -137,13 +137,13 @@ class Game extends Sprite{
 	}
 
 	private function getSectorX():Int
-	{
-		return Std.int(Math.abs(map.x) / Starling.current.stage.stageWidth);			
+	{		
+		return Std.int(-(map.x) / Starling.current.stage.stageWidth);			
 	}
 
 	private function getSectorY():Int
-	{
-		return Std.int(Math.abs(map.y) / Starling.current.stage.stageHeight);
+	{		
+		return Std.int(-(map.y) / Starling.current.stage.stageHeight);
 	}
 
 	private function keyDown(event:KeyboardEvent){
