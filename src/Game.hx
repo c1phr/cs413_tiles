@@ -3,43 +3,50 @@ import starling.display.Image;
 import starling.events.Event;
 import starling.events.KeyboardEvent;
 import starling.core.Starling;
+
 class Game extends Sprite{
 
-  	public var currentSprite:Sprite;
-  	public var character:Image;
+	
+	private var map : Array<Array<UInt>>;
+	private var quad : Quad;
+	private var objects : Array<Image>; // array of in-game objects (ground...)
+	private var babies : Array<Image>; // array of babies
+	public inline static var GRID_SIZE = 64; // the size of each square on the grid
+	
+  	//public var currentSprite:Sprite;
+  	//public var character:Image;
 
+	
   	//Current coords for characters
-  	var charX:Float = 10;
-  	var charY:Float = 10;
+  	//var charX:Float = 10;
+  	//var charY:Float = 10;
 
 	public function new(currentSprite:Sprite){
 		super();
-		this.currentSprite = currentSprite;
+		//this.currentSprite = currentSprite;
 		
-		var row: UInt;		
-		var col: UInt;
-		quad = new Quad(
-			row = Starling.current.stage.stageWidth, 
-			col = Starling.current.stage.stageHeight 
-		);
 		
-		quad.alpha = 0;
-		addChild(quad);
-
-		createGrid(quad);
-		
-		//start();
 	}
 
 	public function start(){
-	    character = new Image(Root.assets.getTexture('character'));
+		
+		var row: UInt = Starling.current.stage.stageWidth;		
+		var col: UInt = Starling.current.stage.stageHeight;
+		quad = new Quad(row, col);
+		
+		quad.alpha = 0;
+		addChild(quad);
+		createGrid(quad);
+		createMap();
+		/*
+		character = new Image(Root.assets.getTexture('character'));
 	    character.x = charX;
 	    character.y = charY;
-	    currentSprite.addChild(character);
+	    currentSprite.addChild(character); */
 
-	    Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDown);
+	    //Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDown);
 	}
-
+/*
 	private function keyDown(event:KeyboardEvent){
 		var keycode = event.keyCode;
 		if(keycode == 83){
@@ -54,5 +61,58 @@ class Game extends Sprite{
 		else if(keycode == 68){
 			character.x += 60;
 		}
+	} */
+	
+	
+	
+	public function createGrid(quad:Quad)
+	{
+		//grid creation
+		var h = 0;
+		while(h <= quad.height)
+		{
+			var q = new Quad(quad.width,2.5,0xffff00);
+			q.y = h;
+			addChild(q);
+			h += GRID_SIZE;
+		}
+		var r = 0;
+		while(r <= quad.width)
+		{
+			var q = new Quad(2.5,quad.height,0xffff00);
+			q.x = r;
+			addChild(q);
+			r += GRID_SIZE;
+		}
+	}
+	
+	private function createMap() {
+		map = new Array<Array<UInt>>();
+
+		//map to store all objects on overworld
+		for(i in 0...Std.int(quad.width/GRID_SIZE))
+		{
+			map[i] = new Array();
+			map[i] = [for(j in 0...Std.int(quad.height/GRID_SIZE)) 0];
+		}
+	}
+	
+	public function goodSpot(xPos:Float,yPos:Float) : Bool {
+		//check if position on grid is okay to move to
+		return xPos >= quad.x &&
+		yPos >= quad.y &&
+		xPos < quad.x + quad.width &&
+		yPos < quad.y + quad.height &&
+		map[Std.int(xPos/GRID_SIZE)][Std.int(yPos/GRID_SIZE)] == 0;
+	}
+	
+	public function addObject(xPos: UInt, yPos: UInt, texture: String) {
+		// for adding platforms and other stuff you can't interact with
+		var obj = new Image(Root.assets.getTexture(texture));
+		obj.x = xPos * GRID_SIZE;
+		obj.y = yPos * GRID_SIZE;
+		map[xPos][yPos] = 1; // add collision detection
+		objects.push(obj);
+		addChild(obj);
 	}
 }
