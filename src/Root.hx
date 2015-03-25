@@ -1,4 +1,4 @@
-import starling.display.Sprite;
+import starling.display.*;
 import starling.utils.AssetManager;
 import starling.core.Starling;
 import starling.animation.Transitions;
@@ -24,8 +24,7 @@ class Root extends Sprite {
 				Starling.juggler.tween(startup.loadingBitmap, 1.0, {
 					transition:Transitions.EASE_OUT, alpha: 0, onComplete: function() {
 						startup.removeChild(startup.loadingBitmap);
-						var game = new Game(rootSprite);
-						game.start();
+						addChild(new Game());
 					}
 
 				});

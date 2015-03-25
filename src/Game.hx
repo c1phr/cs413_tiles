@@ -6,68 +6,29 @@ import starling.core.Starling;
 
 class Game extends Sprite{
 
-	
 	private var map : Array<Array<UInt>>;
 	private var quad : Quad;
 	private var objects : Array<Image>; // array of in-game objects (ground...)
 	private var babies : Array<Image>; // array of babies
 	public inline static var GRID_SIZE = 64; // the size of each square on the grid
 	
-  	//public var currentSprite:Sprite;
-  	//public var character:Image;
-
 	
-  	//Current coords for characters
-  	//var charX:Float = 10;
-  	//var charY:Float = 10;
-
-	public function new(currentSprite:Sprite){
+	public function new(){
 		super();
-		//this.currentSprite = currentSprite;
-		
-		
-	}
-
-	public function start(){
-		
 		var row: UInt = Starling.current.stage.stageWidth;		
 		var col: UInt = Starling.current.stage.stageHeight;
-		quad = new Quad(row, col);
+		quad = new Quad(row, col, 0x000000);
 		
-		quad.alpha = 0;
 		addChild(quad);
+		
 		createGrid(quad);
 		createMap();
-		/*
-		character = new Image(Root.assets.getTexture('character'));
-	    character.x = charX;
-	    character.y = charY;
-	    currentSprite.addChild(character); */
-
-	    //Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDown);
+		
 	}
-/*
-	private function keyDown(event:KeyboardEvent){
-		var keycode = event.keyCode;
-		if(keycode == 83){
-			character.y += 60;
-		}
-		else if(keycode == 87){
-			character.y -=60;
-		}
-		else if(keycode == 65){
-			character.x -= 60;
-		}
-		else if(keycode == 68){
-			character.x += 60;
-		}
-	} */
-	
-	
-	
-	public function createGrid(quad:Quad)
+public function createGrid(quad:Quad)
 	{
 		//grid creation
+		trace("start grid creation");
 		var h = 0;
 		while(h <= quad.height)
 		{
@@ -84,9 +45,12 @@ class Game extends Sprite{
 			addChild(q);
 			r += GRID_SIZE;
 		}
+		trace("end grid creation");
 	}
+
 	
 	private function createMap() {
+		trace("start createmap");
 		map = new Array<Array<UInt>>();
 
 		//map to store all objects on overworld
