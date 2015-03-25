@@ -38,7 +38,7 @@ class Game extends Sprite{
 			}
 		}
 
-
+		map.x = sectorCalc(1, true);
 		currentSprite.addChild(map);
 	    character = new Image(Root.assets.getTexture('character'));
 	    character.x = charX;
@@ -53,8 +53,7 @@ class Game extends Sprite{
 	private function frameUpdate(event:EnterFrameEvent){
 		var sWidth = Starling.current.stage.stageWidth;
 		var sHeight = Starling.current.stage.stageHeight;
-		if(character.x >= sWidth){
-			trace(character.x);
+		if(character.x >= sWidth){			
 			map.x -= sWidth;
 			character.x = 0;
 		}
@@ -73,6 +72,17 @@ class Game extends Sprite{
 		}
 
 
+	}
+
+	private function sectorCalc(sectorNum:Int, horz:Bool):Int
+	{
+		var sWidth:Int = Starling.current.stage.stageWidth;
+		var sHeight:Int = Starling.current.stage.stageHeight;
+		if (horz)
+		{
+			return -(sectorNum * sWidth);
+		}
+		return -(sectorNum * sHeight);
 	}
 
 	private function keyDown(event:KeyboardEvent){
