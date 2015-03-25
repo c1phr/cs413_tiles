@@ -19,7 +19,7 @@ class Game extends Sprite{
 	private var babies : Array<Baby>; // array of babies	
 	private var items: List<Item>;
 	
-  	public var playGameArrow:Image;
+  	public var objectArrow:Image;
 
   	//Current coords for characters
   	var charX:Float = 10;
@@ -57,10 +57,8 @@ class Game extends Sprite{
 	    character.y = charY;
 	    currentSprite.addChild(character);
 	    createMenu();
-		var objectiveHeader:TextField = new TextField(200, 100, "Game Objectives:", "Arial", 30, 0x000000);
-		objectiveHeader.x = getSectorXCenter(2, objectiveHeader.width);
-		objectiveHeader.y = getSectorYCenter(0, objectiveHeader.height * 2);
-		map.addChild(objectiveHeader);
+	    ObjectiveMenuText();
+		
 
 
 
@@ -99,26 +97,39 @@ class Game extends Sprite{
 	{
 		var sWidth:Int = Starling.current.stage.stageWidth;
 		var sHeight:Int = Starling.current.stage.stageHeight;
-		this.playGameArrow = new Image(Root.assets.getTexture('white-arrow'));
-		this.playGameArrow.x = getSectorOffset(1, true) + (sWidth - this.playGameArrow.width);
-		this.playGameArrow.y = getSectorYCenter(0, this.playGameArrow.height);
-		map.addChild(playGameArrow);
+		this.objectArrow = new Image(Root.assets.getTexture('white-arrow'));
+		this.objectArrow.x = getSectorOffset(1, true) + (sWidth - this.objectArrow.width);
+		this.objectArrow.y = getSectorYCenter(0, this.objectArrow.height);
+
+		var objectArrowText:TextField = new TextField(150, 64, "Objectives", "Arial", 16, 0x000000);
+		objectArrowText.x = getSectorOffset(1, true) + (sWidth - objectArrowText.width);
+		objectArrowText.y = getSectorYCenter(0, objectArrowText.height);
+
+		map.addChild(objectArrow);
+		map.addChild(objectArrowText);
 	}
 
-	private function ObjectiveMenuText(method:String){
-		var objectiveText:TextField = new TextField(100, 20, "Hello World", "Arial", 12, 0x000000);
-		if(method == "Destroy"){
-			currentSprite.removeChild(objectiveText);
-			objectiveText = null;
-		}
-		else{
-    		objectiveText.x = Std.int(sWidth /2);
-    		objectiveText.y = Std.int(sHeight / 2);
-    		currentSprite.addChild(objectiveText);
-		}
+	private function ObjectiveMenuText(){
+		var objectiveHeader:TextField = new TextField(200, 100, "Game Objectives:", "Arial", 30, 0x000000);
+		objectiveHeader.x = getSectorXCenter(2, objectiveHeader.width);
+		objectiveHeader.y = getSectorYCenter(0, objectiveHeader.height * 2);
 
+		var objectiveOne:TextField = new TextField(400, 100, "- Search for the Baby Lizards", "Arial", 20, 0x000000);
+		objectiveOne.x = getSectorXCenter(2, objectiveOne.width);
+		objectiveOne.y = getSectorYCenter(0, objectiveOne.height);
 
-	}	
+		var objectiveTwo:TextField = new TextField(400, 100, "- Collect items from each Lizard", "Arial", 20, 0x000000);
+		objectiveTwo.x = getSectorXCenter(2, objectiveTwo.width);
+		objectiveTwo.y = getSectorYCenter(0, objectiveTwo.height - 100);
+
+		var objectiveThree:TextField = new TextField(400, 100, "- Use the items to solve the mystery (Click item to use it)", "Arial", 20, 0x000000);
+		objectiveThree.x = getSectorXCenter(2, objectiveThree.width);
+		objectiveThree.y = getSectorYCenter(0, objectiveThree.height - 200);
+		map.addChild(objectiveHeader);
+		map.addChild(objectiveOne);
+		map.addChild(objectiveTwo);
+		map.addChild(objectiveThree);
+	}
 
 	// Sector helpers: Full game world starts at sector (0,0) in the top left corner
 	// Each chunk of the map that fits on the screen at once is called a "sector"
