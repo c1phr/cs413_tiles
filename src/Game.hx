@@ -2,6 +2,8 @@ import starling.display.Sprite;
 import starling.display.Image;
 import starling.events.Event;
 import starling.events.KeyboardEvent;
+import starling.events.EnterFrameEvent;
+
 import starling.core.Starling;
 class Game extends Sprite{
 
@@ -19,7 +21,6 @@ class Game extends Sprite{
 	public function new(currentSprite:Sprite){
 		super();
 		this.currentSprite = currentSprite;
-		//start();
 	}
 
 	public function start(){		
@@ -36,6 +37,8 @@ class Game extends Sprite{
 				map.addChild(groundGen.ground[xpos][ypos]);
 			}
 		}
+
+
 		currentSprite.addChild(map);
 	    character = new Image(Root.assets.getTexture('character'));
 	    character.x = charX;
@@ -43,6 +46,33 @@ class Game extends Sprite{
 	    currentSprite.addChild(character);
 
 	    Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDown);
+		currentSprite.addEventListener(EnterFrameEvent.ENTER_FRAME, frameUpdate);
+
+	}
+
+	private function frameUpdate(event:EnterFrameEvent){
+		var sWidth = Starling.current.stage.stageWidth;
+		var sHeight = Starling.current.stage.stageHeight;
+		if(character.x >= sWidth){
+			trace(character.x);
+			map.x -= sWidth;
+			character.x = 0;
+		}
+		else if(character.x < 0 ){
+			map.x += sWidth;
+			character.x += sWidth;
+		}
+
+		if(character.y >= sHeight){
+			map.y -= sHeight;
+			character.y -= sHeight;
+		}
+		else if(character.y < 0){
+			map.y += sHeight;
+			character.y += sHeight;
+		}
+
+
 	}
 
 	private function keyDown(event:KeyboardEvent){
