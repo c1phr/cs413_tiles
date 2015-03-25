@@ -6,10 +6,8 @@ import starling.animation.Transitions;
 class Root extends Sprite {
 
 	public static var assets:AssetManager;
-  	public var rootSprite:Sprite;
 
 	public function new() {
-		rootSprite = this;
 		super();
 	}
 	
@@ -22,12 +20,11 @@ class Root extends Sprite {
 			if (ratio == 1) {
 				// fade the loading screen, start game
 				Starling.juggler.tween(startup.loadingBitmap, 1.0, {
-					transition:Transitions.EASE_OUT, delay:3, alpha: 0, onComplete: function() {
+					transition:Transitions.EASE_OUT, alpha: 0, onComplete: function() {
 						startup.removeChild(startup.loadingBitmap);
-						var game = new Game(rootSprite);
-						game.start();
+						
+						addChild(new Game());
 					}
-
 				});
 			}
 		});
