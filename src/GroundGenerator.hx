@@ -1,6 +1,6 @@
-import starling.display.sprite;
+import starling.display.Sprite;
 
-class Generator
+class GroundGenerator
 {
 	public var ground:Array<Array<Ground>>;
 	public function new(map: Map)
