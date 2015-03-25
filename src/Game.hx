@@ -1,6 +1,7 @@
 import starling.display.Sprite;
 import starling.display.Image;
 import starling.events.Event;
+import starling.text.TextField;
 import starling.events.KeyboardEvent;
 import starling.events.EnterFrameEvent;
 
@@ -22,6 +23,10 @@ class Game extends Sprite{
   	//Current coords for characters
   	var charX:Float = 10;
   	var charY:Float = 10;
+
+  	//Global variables for height and width
+	var sWidth:Int = Starling.current.stage.stageWidth;
+	var sHeight:Int = Starling.current.stage.stageHeight;
 
 	public function new(currentSprite:Sprite){
 		super();
@@ -50,6 +55,11 @@ class Game extends Sprite{
 	    character.y = charY;
 	    currentSprite.addChild(character);
 	    createMenu();
+		var objectiveHeader:TextField = new TextField(200, 100, "Game Objectives:", "Arial", 30, 0x000000);
+		objectiveHeader.x = getSectorXCenter(2, objectiveHeader.width);
+		objectiveHeader.y = getSectorYCenter(0, objectiveHeader.height * 2);
+		map.addChild(objectiveHeader);
+
 
 	    Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDown);
 		currentSprite.addEventListener(EnterFrameEvent.ENTER_FRAME, frameUpdate);
@@ -57,8 +67,6 @@ class Game extends Sprite{
 	}
 
 	private function frameUpdate(event:EnterFrameEvent){
-		var sWidth = Starling.current.stage.stageWidth;
-		var sHeight = Starling.current.stage.stageHeight;
 		if(character.x >= sWidth){			
 			map.x -= sWidth;
 			character.x = 0;
@@ -106,24 +114,39 @@ class Game extends Sprite{
 			if (getSectorX() == 1 && getSectorY() == 0)
 			{
 				createMenu();
+
 			}
 			else
 			{
 				destroyMenu();
 			}
-		}
 
+		}
 
 	}
 
 	private function createMenu()
 	{
-		var sWidth:Int = Starling.current.stage.stageWidth;
-		var sHeight:Int = Starling.current.stage.stageHeight;
+
 		this.playGameArrow = new Image(Root.assets.getTexture('white-arrow'));
 		this.playGameArrow.x = sWidth - playGameArrow.width;
 		this.playGameArrow.y = Std.int(sHeight/2);
 		currentSprite.addChild(playGameArrow);
+	}
+
+	private function ObjectiveMenuText(method:String){
+		var objectiveText:TextField = new TextField(100, 20, "Hello World", "Arial", 12, 0x000000);
+		if(method == "Destroy"){
+			currentSprite.removeChild(objectiveText);
+			objectiveText = null;
+		}
+		else{
+    		objectiveText.x = Std.int(sWidth /2);
+    		objectiveText.y = Std.int(sHeight / 2);
+    		currentSprite.addChild(objectiveText);
+		}
+
+
 	}
 
 	private function destroyMenu()
@@ -140,8 +163,6 @@ class Game extends Sprite{
 	// Get the pixel offset of a sector in order to move the map
 	private function getSectorOffset(sectorNum:Int, horz:Bool):Int
 	{
-		var sWidth:Int = Starling.current.stage.stageWidth;
-		var sHeight:Int = Starling.current.stage.stageHeight;
 		if (horz)
 		{
 			return -(sectorNum * sWidth);
@@ -160,6 +181,16 @@ class Game extends Sprite{
 	private function getSectorY():Int
 	{		
 		return Std.int(-(map.y) / Starling.current.stage.stageHeight);
+	}
+
+	private function getSectorXCenter(sector: Int, objectWidth:Float):Int
+	{
+		return Std.int((sWidth * sector) + (sWidth/2) - (objectWidth/2));
+	}
+
+	private function getSectorYCenter(sector: Int, objectHeight:Float):Int
+	{
+		return Std.int((sWidth * sector) + (sWidth/2) - objectHeight);
 	}
 
 	private function keyDown(event:KeyboardEvent){
