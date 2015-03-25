@@ -10,10 +10,10 @@ class Game extends Sprite{
 
   	public var currentSprite:Sprite;
   	public var character:Image;
-  	public var windowx:Float;
-  	public var windoxy:Float;
-  	public var groundGen:GroundGenerator;
+  	  	
   	public var map:GameMap;
+
+  	public var gravityCoefficient:Int = 10;
 	
 	private var objects : Array<Image>; // array of in-game objects (ground...)
 	private var babies : Array<Baby>; // array of babies	
@@ -36,20 +36,7 @@ class Game extends Sprite{
 	}
 
 	public function start(){		
-		groundGen = new GroundGenerator();
-		groundGen.generate();
 		map = new GameMap();
-
-		for (x in 0...50)
-		{
-			for (y in 0...50)
-			{				
-				var xpos:Int = x + Math.floor(windowx/32);
-				var ypos:Int = y + Math.floor(windoxy/32);
-				map.addChild(groundGen.ground[xpos][ypos]);
-			}
-		}
-
 		map.x = -getSectorOffset(1, true);
 		currentSprite.addChild(map);
 	    character = new Image(Root.assets.getTexture('character'));
@@ -57,12 +44,7 @@ class Game extends Sprite{
 	    character.y = charY;
 	    currentSprite.addChild(character);
 	    createMenu();
-	    ObjectiveMenuText();
-		
-
-
-
-	    
+	    ObjectiveMenuText();	    
 	    //this.items.add(new Item(this.currentSprite, "dummy-item", 50, 50));
 
 	    Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDown);
@@ -73,6 +55,7 @@ class Game extends Sprite{
 	private function frameUpdate(event:EnterFrameEvent){
 		var sWidth = Starling.current.stage.stageWidth;
 		var sHeight = Starling.current.stage.stageHeight;
+		character.y += gravityCoefficient;
 		if(character.x >= sWidth){			
 			map.x -= sWidth;
 			character.x = 0;
