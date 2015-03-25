@@ -1,4 +1,4 @@
-import starling.display.Sprite;
+import starling.display.*;
 import starling.display.Image;
 import starling.events.Event;
 import starling.events.KeyboardEvent;
@@ -15,6 +15,19 @@ class Game extends Sprite{
 	public function new(currentSprite:Sprite){
 		super();
 		this.currentSprite = currentSprite;
+		
+		var row: UInt;		
+		var col: UInt;
+		quad = new Quad(
+			row = Starling.current.stage.stageWidth, 
+			col = Starling.current.stage.stageHeight 
+		);
+		
+		quad.alpha = 0;
+		addChild(quad);
+
+		createGrid(quad);
+		
 		//start();
 	}
 
