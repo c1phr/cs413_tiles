@@ -1,6 +1,6 @@
-import starling.display.sprite;
+import starling.display.Sprite;
 
-class Map extends Sprite{
+class Map2 extends Sprite{
 
 	var generator: Generator;
 
