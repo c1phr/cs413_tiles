@@ -7,6 +7,7 @@ class Ground extends Sprite
 	{
 		super();
 		var texture = new Image(Root.assets.getTexture("grass"));
+		this.addChild(texture);
 		this.x = x;
 		this.y = y;
 	}
