@@ -13,7 +13,10 @@ class Game extends Sprite{
   	public var windoxy:Float;
   	public var groundGen:GroundGenerator;
   	public var map:GameMap;
-
+	
+	private var objects : Array<Image>; // array of in-game objects (ground...)
+	private var babies : Array<Baby>; // array of babies
+	
   	public var playGameArrow:Image;
 
   	//Current coords for characters
@@ -160,5 +163,16 @@ class Game extends Sprite{
 		else if(keycode == 68){
 			character.x += 60;
 		}
+	}
+	
+	
+	public function addObject(xPos: UInt, yPos: UInt, texture: String) {
+		// for adding platforms and other stuff you can't interact with
+		var obj = new Image(Root.assets.getTexture(texture));
+		obj.x = xPos;
+		obj.y = yPos;
+		//collisionMap[xPos][yPos] = 1; // add collision detection
+		objects.push(obj);
+		addChild(obj);
 	}
 }
