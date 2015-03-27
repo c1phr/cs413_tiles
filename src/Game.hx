@@ -4,6 +4,7 @@ import starling.events.Event;
 import starling.text.TextField;
 import starling.events.KeyboardEvent;
 import starling.events.EnterFrameEvent;
+import Math.*;
 
 import starling.core.Starling;
 class Game extends Sprite{
@@ -14,7 +15,7 @@ class Game extends Sprite{
   	public var map:GameMap;
 	public var tiles:Tilemap; 
 
-  	public var gravityCoefficient:Int = 10;
+  	public var gravityCoefficient:Int = 0;
 	
 	private var objects : Array<Image>; // array of in-game objects (ground...)
 	private var babies : Array<Baby>; // array of babies	
@@ -46,7 +47,11 @@ class Game extends Sprite{
 		
 		
 		currentSprite.addChild(map);
-	    character = new Image(Root.assets.getTexture('character'));
+	    character = new Image(Root.assets.getTexture('lizard'));
+		// character is now bigger than a tile... could get weird
+		character.scaleX = 2; 
+		character.scaleY = 2;
+		character.smoothing = "none";
 	    character.x = charX;
 	    character.y = charY;
 	    currentSprite.addChild(character);
