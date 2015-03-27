@@ -16,7 +16,8 @@ class GroundGenerator
 		{
 			for (y in 0...200)
 			{
-				ground[x][y] = new Ground(x*64, y*64);
+				// if uncommented, the whole world will be grass tiles.
+				//ground[x][y] = new Ground(x*64, y*64);
 			}
 		}		
 	}

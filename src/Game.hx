@@ -12,6 +12,7 @@ class Game extends Sprite{
   	public var character:Image;
   	  	
   	public var map:GameMap;
+	public var tiles:Tilemap; 
 
   	public var gravityCoefficient:Int = 10;
 	
@@ -35,16 +36,22 @@ class Game extends Sprite{
 		this.items = new List<Item>();
 	}
 
-	public function start(){		
+	public function start() {	
+		
+		var tiles = new Tilemap(Root.assets, "map1");
+		currentSprite.addChild(tiles);
+		
 		map = new GameMap();
 		map.x = -getSectorOffset(1, true);
+		
+		
 		currentSprite.addChild(map);
 	    character = new Image(Root.assets.getTexture('character'));
 	    character.x = charX;
 	    character.y = charY;
 	    currentSprite.addChild(character);
-	    createMenu();
-	    ObjectiveMenuText();	    
+	    
+		createMenu();
 	    //this.items.add(new Item(this.currentSprite, "dummy-item", 50, 50));
 
 	    Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDown);
@@ -53,6 +60,7 @@ class Game extends Sprite{
 	}
 
 	private function frameUpdate(event:EnterFrameEvent){
+		
 		var sWidth = Starling.current.stage.stageWidth;
 		var sHeight = Starling.current.stage.stageHeight;
 		character.y += gravityCoefficient;
@@ -78,8 +86,8 @@ class Game extends Sprite{
 
 	private function createMenu()
 	{
-		var sWidth:Int = Starling.current.stage.stageWidth;
-		var sHeight:Int = Starling.current.stage.stageHeight;
+		//var sWidth:Int = Starling.current.stage.stageWidth;
+		//var sHeight:Int = Starling.current.stage.stageHeight;
 		this.objectArrow = new Image(Root.assets.getTexture('white-arrow'));
 		this.objectArrow.x = getSectorOffset(1, true) + (sWidth - this.objectArrow.width);
 		this.objectArrow.y = getSectorYCenter(0, this.objectArrow.height);
