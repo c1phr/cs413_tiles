@@ -4,6 +4,7 @@ import starling.events.Event;
 import starling.text.TextField;
 import starling.events.KeyboardEvent;
 import starling.events.EnterFrameEvent;
+import flash.geom.Rectangle;
 import Math.*;
 
 import starling.core.Starling;
@@ -15,7 +16,9 @@ class Game extends Sprite{
   	public var map:GameMap;
 	public var tiles:Tilemap; 
 
-  	public var gravityCoefficient:Int = 0;
+	// static inline effectively marks these as "constants"
+  	public static inline var gravityCoefficient:Int = 6;
+  	public static inline var movementCoefficient:Float = 10;
 	
 	private var objects : Array<Image>; // array of in-game objects (ground...)
 	private var babies : Array<Baby>; // array of babies	
@@ -24,8 +27,14 @@ class Game extends Sprite{
   	public var objectArrow:Image;
 
   	//Current coords for characters
-  	var charX:Float = 10;
-  	var charY:Float = 10;
+  	var charX:Float = 1;
+  	var charY:Float = 500;
+  	var charXPos:Int = 0;
+  	var charYPos:Int = 0;  	
+  	var groundBounds:Rectangle;
+  	var deltaX:Float = 0;
+  	var deltaY:Float = 0;
+  	var jumpLock:Bool = false;
 
   	//Global variables for height and width
 	var sWidth:Int = Starling.current.stage.stageWidth;
@@ -34,7 +43,7 @@ class Game extends Sprite{
 	public function new(currentSprite:Sprite){
 		super();
 		this.currentSprite = currentSprite;
-		this.items = new List<Item>();
+		this.items = new List<Item>();		
 	}
 
 	public function start() {	
@@ -45,12 +54,15 @@ class Game extends Sprite{
 		map = new GameMap();
 		map.x = -getSectorOffset(1, true);
 		
+		var groundFloor = new Ground(0, Starling.current.stage.stageHeight - 64);
+		currentSprite.addChild(groundFloor);
 		
-		currentSprite.addChild(map);
+		currentSprite.addChild(map);		
+		groundBounds = groundFloor.bounds;
 	    character = new Image(Root.assets.getTexture('lizard'));
 		// character is now bigger than a tile... could get weird
-		character.scaleX = 2; 
-		character.scaleY = 2;
+		character.scaleX = 1; 
+		character.scaleY = 1;
 		character.smoothing = "none";
 	    character.x = charX;
 	    character.y = charY;
@@ -60,6 +72,7 @@ class Game extends Sprite{
 	    //this.items.add(new Item(this.currentSprite, "dummy-item", 50, 50));
 
 	    Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDown);
+	    Starling.current.stage.addEventListener(KeyboardEvent.KEY_UP, keyUp);
 		currentSprite.addEventListener(EnterFrameEvent.ENTER_FRAME, frameUpdate);
 
 	}
@@ -67,8 +80,25 @@ class Game extends Sprite{
 	private function frameUpdate(event:EnterFrameEvent){
 		
 		var sWidth = Starling.current.stage.stageWidth;
-		var sHeight = Starling.current.stage.stageHeight;
-		character.y += gravityCoefficient;
+		var sHeight = Starling.current.stage.stageHeight;		
+		var characterBounds:Rectangle = character.bounds;		
+		if (!characterBounds.intersects(groundBounds))
+		{
+			if (deltaY < 0)
+			{				
+				deltaY += 1;
+			}
+			else
+			{
+				character.y += gravityCoefficient;
+			}
+		}	
+		else if (jumpLock && deltaY == 0)
+		{			
+			jumpLock = false;
+		}	
+		character.x += deltaX;
+		character.y += deltaY;
 		if(character.x >= sWidth){			
 			map.x -= sWidth;
 			character.x = 0;
@@ -166,19 +196,25 @@ class Game extends Sprite{
 	}
 
 	private function keyDown(event:KeyboardEvent){
-		var keycode = event.keyCode;
-		if(keycode == 83){
-			character.y += 60;
-		}
-		else if(keycode == 87){
-			character.y -=60;
+		var keycode = event.keyCode;				
+		if(keycode == 32 && !jumpLock){
+			jumpLock = true;	
+			deltaY = -movementCoefficient * 1.5;
 		}
 		else if(keycode == 65){
-			character.x -= 60;
+			deltaX = -movementCoefficient;
 		}
 		else if(keycode == 68){
-			character.x += 60;
+			deltaX = movementCoefficient;
 		}
+	}
+
+	private function keyUp(event:KeyboardEvent)
+	{
+		var keycode = event.keyCode;
+		if(keycode == 65 || keycode == 68){
+			deltaX = 0;
+		}		
 	}
 	
 	
