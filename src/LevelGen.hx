@@ -17,7 +17,7 @@ class LevelGen
 			{				
 				if (level[yPlat][xPlat] > 0)
 				{
-					var newPlat = new Platform(xPlat * 64, yPlat * 64, level[yPlat][xPlat]);
+					var newPlat = new Platform(xPlat * 64, (yPlat * 64)-64, level[yPlat][xPlat]);
 					platforms.add(newPlat);
 					currentSprite.addChild(newPlat);					
 				}
