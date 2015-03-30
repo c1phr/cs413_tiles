@@ -10,17 +10,6 @@ import Math.*;
 import starling.core.Starling;
 class Game extends Sprite{
 
-	private var level1 = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-						  [0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
-						  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-						  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-						  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-						  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-						  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-						  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-						  [0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
-						  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]];
-
   	public var currentSprite:Sprite;
   	public var character:Image;
   	  	
@@ -66,7 +55,7 @@ class Game extends Sprite{
 		currentSprite.addChild(tiles);
 
 		levelGen = new LevelGen();
-		levelGen.generate(level1, currentSprite);
+		levelGen.generate(Levels.Level1(), currentSprite);
 		
 		map = new GameMap();
 		map.x = -getSectorOffset(1, true);
