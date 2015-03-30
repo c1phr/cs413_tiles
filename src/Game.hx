@@ -20,7 +20,7 @@ class Game extends Sprite{
   	public static inline var gravityCoefficient:Int = 6;
   	public static inline var movementCoefficient:Float = 10;
 	
-	private var objects : Array<Image>; // array of in-game objects (ground...)
+	private var platforms : Array<Image>; // array of in-game platforms
 	private var babies : Array<Baby>; // array of babies	
 	private var items: List<Item>;
 	
@@ -43,6 +43,7 @@ class Game extends Sprite{
 	public function new(currentSprite:Sprite){
 		super();
 		this.currentSprite = currentSprite;
+		babies = new Array();
 		this.items = new List<Item>();		
 	}
 
@@ -60,14 +61,13 @@ class Game extends Sprite{
 		currentSprite.addChild(map);		
 		groundBounds = groundFloor.bounds;
 	    character = new Image(Root.assets.getTexture('lizard'));
-		// character is now bigger than a tile... could get weird
-		character.scaleX = 1; 
-		character.scaleY = 1;
 		character.smoothing = "none";
 	    character.x = charX;
 	    character.y = charY;
 	    currentSprite.addChild(character);
 	    
+		addBaby(300, 550, "baby1");
+		
 		createMenu();
 	    //this.items.add(new Item(this.currentSprite, "dummy-item", 50, 50));
 
@@ -218,13 +218,20 @@ class Game extends Sprite{
 	}
 	
 	
-	public function addObject(xPos: UInt, yPos: UInt, texture: String) {
+	public function addBaby(xPos: Int, yPos: Int, texture: String) {
+		// for adding babies. Need the x and y coordinates and a texture name
+		var b = new Baby(xPos, yPos, texture);
+		babies.push(b); // add to the baby array
+		currentSprite.addChild(b.me);
+	}
+	
+	public function addPlatform(xPos: UInt, yPos: UInt, texture: String) {
 		// for adding platforms and other stuff you can't interact with
 		var obj = new Image(Root.assets.getTexture(texture));
 		obj.x = xPos;
 		obj.y = yPos;
 		//collisionMap[xPos][yPos] = 1; // add collision detection
-		objects.push(obj);
+		platforms.push(obj);
 		addChild(obj);
 	}
 }
