@@ -55,7 +55,7 @@ class Game extends Sprite{
 		currentSprite.addChild(tiles);
 
 		levelGen = new LevelGen();
-		levelGen.generate(Levels.Level1(), currentSprite);
+		levelGen.generate(Levels.Level1, currentSprite);
 		
 		map = new GameMap();
 		map.x = -getSectorOffset(1, true);
