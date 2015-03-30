@@ -27,7 +27,7 @@ class Game extends Sprite{
   	public var objectArrow:Image;
 
   	//Current coords for characters
-  	var charX:Float = 1;
+  	var charX:Float = 30;
   	var charY:Float = 500;
   	var charXPos:Int = 0;
   	var charYPos:Int = 0;  	
@@ -96,18 +96,23 @@ class Game extends Sprite{
 		else if (jumpLock && deltaY == 0)
 		{			
 			jumpLock = false;
+		}
+		if(character.x >= 0 && character.x <= (sWidth - character.width)){
+      		character.x += deltaX;
+		}
+		else if(character.x <= 0){
+			character.x = 0;
 		}	
-		character.x += deltaX;
-		character.y += deltaY;
+		else if(character.x >= (sWidth-character.width)){
+			character.x = (sWidth-character.width);
+		}
+		if(character.y > 0 && character.y < sHeight){
+      		character.y += deltaY;
+		}	
 		if(character.x >= sWidth){			
 			map.x -= sWidth;
 			character.x = 0;
 		}
-		else if(character.x < 0 ){
-			map.x += sWidth;
-			character.x += sWidth;
-		}
-
 		if(character.y >= sHeight){
 			map.y -= sHeight;
 			character.y -= sHeight;
