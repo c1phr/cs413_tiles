@@ -30,7 +30,7 @@ class Game extends Sprite{
 
   	//Current coords for characters
   	var charX:Float = 30;
-  	var charY:Float = 600;
+  	var charY:Float = 560;
   	var charXPos:Int = 0;
   	var charYPos:Int = 0;  	
   	var groundBounds:Rectangle;
@@ -90,51 +90,50 @@ class Game extends Sprite{
 		var platformTopCollision:Bool = false;
 		var platformBottomCollision:Bool = false;
 
+		// Check for collisions with platforms
 		for (platform in levelGen.platforms)
 		{
+			// Get the platform bounds in the coordinate-space of the currentSprite
 			var platformRect = platform.texture.getBounds(currentSprite);
 			if (characterBounds.intersects(platformRect))
 			{									
 				if (character.y <= platformRect.top)
 				{									
-					platformTopCollision = true;					
+					platformTopCollision = true; // Character collided with the top of a platform
 				}
 				if (character.y + character.height >= platformRect.bottom)
 				{									
-					platformBottomCollision = true;
+					platformBottomCollision = true; // Character collided with the bottom of a platform
 				}
-				break;
+				break; // If we collided with a platform, we don't need to keep looking
 			}
 		}
+		// If the character isn't on the ground, handle other collisions
 		if (!characterBounds.intersects(groundBounds))
 		{
-				if (deltaY < 0 && !platformBottomCollision) // Up
+				if (deltaY < 0 && !platformBottomCollision) // Jumping up
 				{									
 					deltaY += 1;					
 				}				
-				else if (!platformTopCollision) // Down
+				else if (!platformTopCollision) // Falling down
 				{					
 					character.y += gravityCoefficient;					
 				}
-				else if (platformTopCollision)
+				else if (platformTopCollision) // We landed on a platform
 				{
 					deltaY = 0;
-					jumpLock = false;
-				}				
-				else
-				{					
-					deltaY = 0;
-					character.y += gravityCoefficient;
-				}				
-				if (platformBottomCollision)
+					jumpLock = false; // On a platform, unlock jumping
+				}								
+				if (platformBottomCollision) // We hit our head on the bottom of a platform
 				{					
 					deltaY = 0;
 					character.y += gravityCoefficient;
 				}
 		}	
-		else if (jumpLock && deltaY == 0)
+
+		else if (jumpLock && deltaY == 0) // Fell down and hit the ground, unlock jumping
 		{			
-			jumpLock = false;
+			jumpLock = false;			
 		}		
 		if(character.x >= 0 && character.x <= (sWidth - character.width)){
       		character.x += deltaX;
