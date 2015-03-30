@@ -10,6 +10,17 @@ import Math.*;
 import starling.core.Starling;
 class Game extends Sprite{
 
+	private var level1 = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						  [0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
+						  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						  [0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
+						  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]];
+
   	public var currentSprite:Sprite;
   	public var character:Image;
   	  	
@@ -23,6 +34,7 @@ class Game extends Sprite{
 	private var platforms : Array<Image>; // array of in-game platforms
 	private var babies : Array<Baby>; // array of babies	
 	private var items: List<Item>;
+	private var levelGen:LevelGen;
 	
   	public var objectArrow:Image;
   	public var ground:Image;
@@ -52,6 +64,8 @@ class Game extends Sprite{
 		
 		var tiles = new Tilemap(Root.assets, "map1");
 		currentSprite.addChild(tiles);
+
+		levelGen = new LevelGen(level1, currentSprite);
 		
 		map = new GameMap();
 		map.x = -getSectorOffset(1, true);
@@ -60,7 +74,7 @@ class Game extends Sprite{
 		map.addChild(groundFloor);
 		
 		currentSprite.addChild(map);		
-		groundBounds = groundFloor.bounds;
+		groundBounds = groundFloor.getBounds(currentSprite);
 	    character = new Image(Root.assets.getTexture('lizard'));
 		character.smoothing = "none";
 	    character.x = charX;
@@ -83,21 +97,55 @@ class Game extends Sprite{
 		var sWidth = Starling.current.stage.stageWidth;
 		var sHeight = Starling.current.stage.stageHeight;		
 		var characterBounds:Rectangle = character.bounds;		
+		var platformTopCollision:Bool = false;
+		var platformBottomCollision:Bool = false;
+
+		for (platform in levelGen.platforms)
+		{
+			var platformRect = platform.texture.getBounds(currentSprite);
+			if (characterBounds.intersects(platformRect))
+			{									
+				if (character.y <= platformRect.top)
+				{									
+					platformTopCollision = true;					
+				}
+				if (character.y + character.height >= platformRect.bottom)
+				{									
+					platformBottomCollision = true;
+				}
+				break;
+			}
+		}
 		if (!characterBounds.intersects(groundBounds))
 		{
-			if (deltaY < 0)
-			{				
-				deltaY += 1;
-			}
-			else
-			{
-				character.y += gravityCoefficient;
-			}
+				if (deltaY < 0 && !platformBottomCollision) // Up
+				{									
+					deltaY += 1;					
+				}				
+				else if (!platformTopCollision) // Down
+				{					
+					character.y += gravityCoefficient;					
+				}
+				else if (platformTopCollision)
+				{
+					deltaY = 0;
+					jumpLock = false;
+				}				
+				else
+				{					
+					deltaY = 0;
+					character.y += gravityCoefficient;
+				}				
+				if (platformBottomCollision)
+				{					
+					deltaY = 0;
+					character.y += gravityCoefficient;
+				}
 		}	
 		else if (jumpLock && deltaY == 0)
 		{			
 			jumpLock = false;
-		}
+		}		
 		if(character.x >= 0 && character.x <= (sWidth - character.width)){
       		character.x += deltaX;
 		}
@@ -112,9 +160,8 @@ class Game extends Sprite{
 		}	
 		if(character.y >= 635){
 			character.y -= 80;
-			      		trace(sHeight);
-
 		}
+
 		if(character.x >= sWidth){			
 			map.x -= sWidth;
 			character.x = 0;
