@@ -65,7 +65,8 @@ class Game extends Sprite{
 		var tiles = new Tilemap(Root.assets, "map1");
 		currentSprite.addChild(tiles);
 
-		levelGen = new LevelGen(level1, currentSprite);
+		levelGen = new LevelGen();
+		levelGen.generate(level1, currentSprite);
 		
 		map = new GameMap();
 		map.x = -getSectorOffset(1, true);
