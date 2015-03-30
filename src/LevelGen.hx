@@ -1,16 +1,23 @@
 import starling.display.Sprite;
 import starling.display.Image;
 
+// This class generates the arrangement of platforms based on the level array that's passed in
 class LevelGen
 {
 	public var platforms:List<Platform>;
+
 	public function new()
 	{
 		platforms = new List<Platform>();
 	}
+
 	public function generate(level:Array<Array<Int>>, currentSprite:Sprite)
 	{
-		platforms = new List<Platform>();
+		if (!platforms.isEmpty())
+		{
+			throw "Old level must be destroyed before generating a new one";
+			return;
+		}
 		for (yPlat in 0...10)
 		{			
 			for (xPlat in 0...10)
@@ -24,7 +31,7 @@ class LevelGen
 			}	
 		}
 	}
-
+	// Destroy removes all platforms and readies the level generator to build a new map
 	public function destroy()
 	{
 		for (platform in platforms)
