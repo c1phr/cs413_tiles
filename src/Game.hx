@@ -25,10 +25,11 @@ class Game extends Sprite{
 	private var items: List<Item>;
 	
   	public var objectArrow:Image;
+  	public var ground:Image;
 
   	//Current coords for characters
   	var charX:Float = 30;
-  	var charY:Float = 500;
+  	var charY:Float = 600;
   	var charXPos:Int = 0;
   	var charYPos:Int = 0;  	
   	var groundBounds:Rectangle;
@@ -55,8 +56,8 @@ class Game extends Sprite{
 		map = new GameMap();
 		map.x = -getSectorOffset(1, true);
 		
-		var groundFloor = new Ground(0, Starling.current.stage.stageHeight - 64);
-		currentSprite.addChild(groundFloor);
+		var groundFloor = new Ground(getSectorOffset(1, true), Starling.current.stage.stageHeight - 64);
+		map.addChild(groundFloor);
 		
 		currentSprite.addChild(map);		
 		groundBounds = groundFloor.bounds;
@@ -66,7 +67,7 @@ class Game extends Sprite{
 	    character.y = charY;
 	    currentSprite.addChild(character);
 	    
-		addBaby(300, 550, "baby1");
+		//addBaby(300, 550, "baby1");
 		
 		createMenu();
 	    //this.items.add(new Item(this.currentSprite, "dummy-item", 50, 50));
@@ -106,9 +107,14 @@ class Game extends Sprite{
 		else if(character.x >= (sWidth-character.width)){
 			character.x = (sWidth-character.width);
 		}
-		if(character.y > 0 && character.y < sHeight){
+		if(character.y >= 0){
       		character.y += deltaY;
 		}	
+		if(character.y >= 635){
+			character.y -= 80;
+			      		trace(sHeight);
+
+		}
 		if(character.x >= sWidth){			
 			map.x -= sWidth;
 			character.x = 0;
@@ -128,6 +134,11 @@ class Game extends Sprite{
 	{
 		//var sWidth:Int = Starling.current.stage.stageWidth;
 		//var sHeight:Int = Starling.current.stage.stageHeight;
+
+		//ground = new Image(Root.assets.getTexture("ground-temp"));
+		//ground.x = getSectorOffset(1, true);
+		//ground.y = 620;
+
 		this.objectArrow = new Image(Root.assets.getTexture('white-arrow'));
 		this.objectArrow.x = getSectorOffset(1, true) + (sWidth - this.objectArrow.width);
 		this.objectArrow.y = getSectorYCenter(0, this.objectArrow.height);
@@ -137,6 +148,7 @@ class Game extends Sprite{
 		objectArrowText.y = getSectorYCenter(0, objectArrowText.height);
 
 		map.addChild(objectArrow);
+		//map.addChild(ground);
 		map.addChild(objectArrowText);
 	}
 

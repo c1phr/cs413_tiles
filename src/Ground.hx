@@ -8,7 +8,7 @@ class Ground extends Sprite
 		super();
 		for (x in 0...11)
 		{
-			var texture = new Image(Root.assets.getTexture("ground-temp"));
+			var texture = new Image(Root.assets.getTexture("grass"));
 			texture.y = this.y;
 			texture.x = 64 * x;
 			this.addChild(texture);
