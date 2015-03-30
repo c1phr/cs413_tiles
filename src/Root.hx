@@ -1,6 +1,7 @@
 import starling.display.Sprite;
 import starling.utils.AssetManager;
 import starling.core.Starling;
+import starling.text.*;
 import starling.animation.Transitions;
 
 class Root extends Sprite {
@@ -15,6 +16,7 @@ class Root extends Sprite {
 	
 	public function start(startup:Startup) {
 		assets = new AssetManager();
+				assets.enqueue("assets/PixelNoir.fnt", "assets/PixelNoir.png");
     	assets.enqueue("assets/lizard.png", "assets/baby1.png");
 		assets.enqueue("assets/grass.png");
 		assets.enqueue("assets/white-arrow.png");
@@ -30,6 +32,8 @@ class Root extends Sprite {
 				Starling.juggler.tween(startup.loadingBitmap, 1.0, {
 					transition:Transitions.EASE_OUT, delay:0, alpha: 0, onComplete: function() {
 						startup.removeChild(startup.loadingBitmap);
+						TextField.registerBitmapFont(new BitmapFont(assets.getTexture("PixelNoir.png"),
+											assets.getXml("PixelNoir.fnt")),"PNoir");
 						var game = new Game(rootSprite);
 						game.start();
 					}

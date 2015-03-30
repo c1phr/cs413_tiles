@@ -179,7 +179,7 @@ class Game extends Sprite{
 		this.objectArrow.x = getSectorOffset(1, true) + (sWidth - this.objectArrow.width);
 		this.objectArrow.y = getSectorYCenter(0, this.objectArrow.height);
 
-		var objectArrowText:TextField = new TextField(150, 64, "Objectives", "Arial", 16, 0x000000);
+		var objectArrowText:TextField = new TextField(150, 64, "Objectives", "PNoir", 16, 0x000000);
 		objectArrowText.x = getSectorOffset(1, true) + (sWidth - objectArrowText.width);
 		objectArrowText.y = getSectorYCenter(0, objectArrowText.height);
 
@@ -189,19 +189,19 @@ class Game extends Sprite{
 	}
 
 	private function ObjectiveMenuText(){
-		var objectiveHeader:TextField = new TextField(200, 100, "Game Objectives:", "Arial", 30, 0x000000);
+		var objectiveHeader:TextField = new TextField(200, 100, "Game Objectives:", "PNoir", 30, 0x000000);
 		objectiveHeader.x = getSectorXCenter(2, objectiveHeader.width);
 		objectiveHeader.y = getSectorYCenter(0, objectiveHeader.height * 2);
 
-		var objectiveOne:TextField = new TextField(400, 100, "- Search for the Baby Lizards", "Arial", 20, 0x000000);
+		var objectiveOne:TextField = new TextField(400, 100, "- Search for the Baby Lizards", "PNoir", 20, 0x000000);
 		objectiveOne.x = getSectorXCenter(2, objectiveOne.width);
 		objectiveOne.y = getSectorYCenter(0, objectiveOne.height);
 
-		var objectiveTwo:TextField = new TextField(400, 100, "- Collect items from each Lizard", "Arial", 20, 0x000000);
+		var objectiveTwo:TextField = new TextField(400, 100, "- Collect items from each Lizard", "PNoir", 20, 0x000000);
 		objectiveTwo.x = getSectorXCenter(2, objectiveTwo.width);
 		objectiveTwo.y = getSectorYCenter(0, objectiveTwo.height - 100);
 
-		var objectiveThree:TextField = new TextField(400, 100, "- Use the items to solve the mystery (Click item to use it)", "Arial", 20, 0x000000);
+		var objectiveThree:TextField = new TextField(400, 100, "- Use the items to solve the mystery (Click item to use it)", "PNoir", 20, 0x000000);
 		objectiveThree.x = getSectorXCenter(2, objectiveThree.width);
 		objectiveThree.y = getSectorYCenter(0, objectiveThree.height - 200);
 		map.addChild(objectiveHeader);
