@@ -30,6 +30,7 @@ class Game extends Sprite{
   	public var ground:Image;
   	public var door:Image;
   	public var key:Image;
+  	private var hasKey:Bool;
 
   	//Current coords for characters
   	var charX:Float = 30;
@@ -57,8 +58,6 @@ class Game extends Sprite{
 		var tiles = new Tilemap(Root.assets, "map1");
 		currentSprite.addChild(tiles);
 		tiles.y = 32;
-
-
 		
 		map = new GameMap();
 		map.x = -getSectorOffset(1, true);
@@ -113,7 +112,6 @@ class Game extends Sprite{
 				{									
 					platformBottomCollision = true; // Character collided with the bottom of a platform
 				}				
-				
 				break; // If we collided with a platform, we don't need to keep looking
 			}
 		}
@@ -149,10 +147,8 @@ class Game extends Sprite{
 		}
 		else if(character.x <= 0){
 			character.x = 0;
-		}	
-		// else if(character.x >= (sWidth-character.width)){
-		// 	character.x = (sWidth-character.width);
-		// }
+		}
+
 		if(character.y >= 0){
       		character.y += deltaY;
 		}	
@@ -173,6 +169,14 @@ class Game extends Sprite{
 			map.y += sHeight;
 			character.y += sHeight;			
 		}
+
+		if(key != null && characterBounds.intersects(key.getBounds(currentSprite))){
+			key.removeFromParent();
+			hasKey = true;
+			key = null;
+		}
+
+
 
 	}
 
@@ -263,10 +267,20 @@ class Game extends Sprite{
 	}
 
 	private function keyDown(event:KeyboardEvent){
-		var keycode = event.keyCode;				
+		var keycode = event.keyCode;
+
 		if(keycode == 32 && !jumpLock){
-			jumpLock = true;	
-			deltaY = -movementCoefficient * 1.5;
+			if(character.bounds.intersects(door.getBounds(currentSprite))){
+				if(hasKey){
+					levelGen.destroy();
+					hasKey = false;
+				}
+			}
+			else{
+				jumpLock = true;	
+				deltaY = -movementCoefficient * 1.5;
+			}
+
 		}
 		else if(keycode == 65){
 			deltaX = -movementCoefficient;
