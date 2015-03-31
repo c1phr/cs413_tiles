@@ -118,11 +118,7 @@ var groundFloor:Ground;
 					platformTopCollision = true; // Character collided with the top of a platform
 					if (platform.hasSpikes)
 					{
-						character.x = charX;
-						character.y = charY;
-						map.addChild(key);
-						hasKey = false;
-
+						loseLife(); // character has collided with spikes
 					}
 				}
 				if (character.y + character.height >= platformRect.bottom)
@@ -195,9 +191,6 @@ var groundFloor:Ground;
 			key.removeFromParent();
 			hasKey = true;
 		}
-
-
-
 	}
 
 	private function level0()
@@ -338,6 +331,24 @@ var groundFloor:Ground;
 		if(keycode == 65 || keycode == 68){
 			deltaX = 0;
 		}		
+	}
+	
+	public function loseLife() {
+		if (characterInfo.lives > 0) {
+			// reset character
+			character.x = charX;
+			character.y = charY;
+			characterInfo.lives--;
+			characterInfo.text.text = "Lives: " + Std.string(characterInfo.lives);
+			map.addChild(key);
+			hasKey = false;
+		}
+		else {
+			// game over
+			character.x = charX;
+			character.y = charY;
+		}
+
 	}
 	
 	public function addBaby(xPos: Int, yPos: Int, texture: String) {
