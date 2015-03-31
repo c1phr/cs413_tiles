@@ -53,6 +53,7 @@ class Game extends Sprite{
 		
 		var tiles = new Tilemap(Root.assets, "map1");
 		currentSprite.addChild(tiles);
+		tiles.y = 32;
 
 
 		
