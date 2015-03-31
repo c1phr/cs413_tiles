@@ -34,14 +34,18 @@ class Game extends Sprite{
 
   	//Current coords for characters
   	var charX:Float = 30;
-  	var charY:Float = 560;
+  	var charY:Float = 540;
   	var charXPos:Int = 0;
   	var charYPos:Int = 0;  	
   	var groundBounds:Rectangle;
   	var deltaX:Float = 0;
   	var deltaY:Float = 0;
   	var jumpLock:Bool = false;
+  	var thisLevel = 0;
+  	var counter = 0;
 
+  	var levelTransition:Bool = false;
+var groundFloor:Ground;
   	//Global variables for height and width
 	var sWidth:Int = Starling.current.stage.stageWidth;
 	var sHeight:Int = Starling.current.stage.stageHeight;
@@ -62,23 +66,34 @@ class Game extends Sprite{
 		map = new GameMap();
 		map.x = -getSectorOffset(1, true);
 		
-		var groundFloor = new Ground(getSectorOffset(1, true), Starling.current.stage.stageHeight - 64);
-		map.addChild(groundFloor);
-		
 		currentSprite.addChild(map);		
-		groundBounds = groundFloor.getBounds(currentSprite);
 	    character = new Image(Root.assets.getTexture('lizard'));
 		character.smoothing = "none";
 	    character.x = charX;
 	    character.y = charY;
 	    currentSprite.addChild(character);
-	    
-		
+
+	    //spawn the ground and level 0
+		createGroundLevels();
 		level0();
 
 	    Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDown);
 	    Starling.current.stage.addEventListener(KeyboardEvent.KEY_UP, keyUp);
 		currentSprite.addEventListener(EnterFrameEvent.ENTER_FRAME, frameUpdate);
+
+	}
+
+	private function createGroundLevels(){
+		groundFloor = new Ground(getSectorOffset(1, true), Starling.current.stage.stageHeight - 64);
+		map.addChild(groundFloor);
+		groundBounds = groundFloor.getBounds(currentSprite);
+
+		//scaffold for seven levels.
+		for ( x in 2...8)
+		{
+		groundFloor = new Ground(getSectorOffset(x, true), Starling.current.stage.stageHeight - 64);
+		map.addChild(groundFloor);
+		}
 
 	}
 
@@ -95,7 +110,7 @@ class Game extends Sprite{
 		{
 			// Get the platform bounds in the coordinate-space of the currentSprite
 			var platformRect = platform.texture.getBounds(currentSprite);
-			if (characterBounds.intersects(platformRect))
+			if (characterBounds.intersects(platformRect) && !levelTransition)
 			{									
 				if (character.y <= platformRect.top)
 				{									
@@ -119,21 +134,25 @@ class Game extends Sprite{
 		// If the character isn't on the ground, handle other collisions
 		if (!characterBounds.intersects(groundBounds))
 		{
+
 				if (deltaY < 0 && !platformBottomCollision) // Jumping up
-				{									
+				{
 					deltaY += 1;					
 				}				
 				else if (!platformTopCollision) // Falling down
-				{					
+				{	
 					character.y += gravityCoefficient;					
 				}
+
 				else if (platformTopCollision) // We landed on a platform
 				{
+
 					deltaY = 0;
 					jumpLock = false; // On a platform, unlock jumping
 				}								
 				if (platformBottomCollision) // We hit our head on the bottom of a platform
-				{					
+				{
+					// trace("what" + (++counter));		
 					deltaY = 0;
 					character.y += gravityCoefficient;
 				}
@@ -173,7 +192,6 @@ class Game extends Sprite{
 
 		if(hasKey == false && characterBounds.intersects(key.getBounds(currentSprite))){
 			key.removeFromParent();
-			//key = null;
 			hasKey = true;
 		}
 
@@ -183,6 +201,7 @@ class Game extends Sprite{
 
 	private function level0()
 	{
+
 
 		//add in the first door/key
 		door = new Image(Root.assets.getTexture('door'));
@@ -235,6 +254,21 @@ class Game extends Sprite{
 
 	}
 
+	private function nextLevel(level:Int)
+	{
+		//Set the character forward one level.
+		character.x = getSectorOffset((level+1), true);
+		character.y = charY;
+		switch(level){
+			case 1:
+				//Enter level 1 information
+			case 2:
+				//Enter level 2 information
+			case 3: 
+				//Enter level 3 information
+		}
+	}
+
 	// Sector helpers: Full game world starts at sector (0,0) in the top left corner
 	// Each chunk of the map that fits on the screen at once is called a "sector"
 	// Bottom right sector is (4,4), going beyond 4 or into negative numbers is 
@@ -280,9 +314,7 @@ class Game extends Sprite{
 			if(character.bounds.intersects(door.getBounds(currentSprite))){
 				if(hasKey){
 					levelGen.destroy();
-					//hasKey = false;
-					character.x = getSectorOffset(2, true);
-					character.y = charY;
+					nextLevel(++thisLevel);
 				}
 			}
 			else{
