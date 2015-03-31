@@ -73,10 +73,8 @@ class Game extends Sprite{
 	    character.y = charY;
 	    currentSprite.addChild(character);
 	    
-		//addBaby(300, 550, "baby1");
 		
 		level0();
-	    //this.items.add(new Item(this.currentSprite, "dummy-item", 50, 50));
 
 	    Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDown);
 	    Starling.current.stage.addEventListener(KeyboardEvent.KEY_UP, keyUp);
@@ -106,6 +104,9 @@ class Game extends Sprite{
 					{
 						character.x = charX;
 						character.y = charY;
+						map.addChild(key);
+						hasKey = false;
+
 					}
 				}
 				if (character.y + character.height >= platformRect.bottom)
@@ -170,10 +171,10 @@ class Game extends Sprite{
 			character.y += sHeight;			
 		}
 
-		if(key != null && characterBounds.intersects(key.getBounds(currentSprite))){
+		if(hasKey == false && characterBounds.intersects(key.getBounds(currentSprite))){
 			key.removeFromParent();
+			//key = null;
 			hasKey = true;
-			key = null;
 		}
 
 
@@ -279,7 +280,7 @@ class Game extends Sprite{
 			if(character.bounds.intersects(door.getBounds(currentSprite))){
 				if(hasKey){
 					levelGen.destroy();
-					hasKey = false;
+					//hasKey = false;
 					character.x = getSectorOffset(2, true);
 					character.y = charY;
 				}
