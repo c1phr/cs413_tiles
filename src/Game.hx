@@ -54,8 +54,7 @@ class Game extends Sprite{
 		var tiles = new Tilemap(Root.assets, "map1");
 		currentSprite.addChild(tiles);
 
-		levelGen = new LevelGen();
-		levelGen.generate(Levels.Level1, currentSprite);
+
 		
 		map = new GameMap();
 		map.x = -getSectorOffset(1, true);
@@ -141,9 +140,9 @@ class Game extends Sprite{
 		else if(character.x <= 0){
 			character.x = 0;
 		}	
-		else if(character.x >= (sWidth-character.width)){
-			character.x = (sWidth-character.width);
-		}
+		// else if(character.x >= (sWidth-character.width)){
+		// 	character.x = (sWidth-character.width);
+		// }
 		if(character.y >= 0){
       		character.y += deltaY;
 		}	
@@ -151,9 +150,10 @@ class Game extends Sprite{
 			character.y -= 80;
 		}
 
-		if(character.x >= sWidth){			
+		if(character.x >= (sWidth-character.width)){
 			map.x -= sWidth;
 			character.x = 0;
+			levelGen.destroy();
 		}
 		if(character.y >= sHeight){
 			map.y -= sHeight;
@@ -168,13 +168,6 @@ class Game extends Sprite{
 
 	private function createMenu()
 	{
-		//var sWidth:Int = Starling.current.stage.stageWidth;
-		//var sHeight:Int = Starling.current.stage.stageHeight;
-
-		//ground = new Image(Root.assets.getTexture("ground-temp"));
-		//ground.x = getSectorOffset(1, true);
-		//ground.y = 620;
-
 		this.objectArrow = new Image(Root.assets.getTexture('white-arrow'));
 		this.objectArrow.x = getSectorOffset(1, true) + (sWidth - this.objectArrow.width);
 		this.objectArrow.y = getSectorYCenter(0, this.objectArrow.height);
@@ -184,8 +177,10 @@ class Game extends Sprite{
 		objectArrowText.y = getSectorYCenter(0, objectArrowText.height);
 
 		map.addChild(objectArrow);
-		//map.addChild(ground);
 		map.addChild(objectArrowText);
+
+		levelGen = new LevelGen();
+		levelGen.generate(Levels.Level0, currentSprite);
 	}
 
 	private function ObjectiveMenuText(){
