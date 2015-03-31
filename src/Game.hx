@@ -6,21 +6,17 @@ import starling.events.KeyboardEvent;
 import starling.events.EnterFrameEvent;
 import flash.geom.Rectangle;
 import Math.*;
-
 import starling.core.Starling;
+
+typedef CharacterInformation = { lives : Int, text : TextField }
+
 class Game extends Sprite{
 
   	public var currentSprite:Sprite;
-  	public var character:Image;
-  	  	
+  	
   	public var map:GameMap;
 	public var tiles:Tilemap; 
-
-	// static inline effectively marks these as "constants"
-  	public static inline var gravityCoefficient:Int = 6;
-  	public static inline var movementCoefficient:Float = 10;
 	
-	private var platforms : Array<Image>; // array of in-game platforms
 	private var babies : Array<Baby>; // array of babies	
 	private var items: List<Item>;
 	private var levelGen:LevelGen;
@@ -30,16 +26,23 @@ class Game extends Sprite{
   	private var ground:Image;
   	private var door:Image;
   	private var key:Image;
-  	private var hasKey:Bool;
-
-  	//Current coords for characters
+	
+  	//initial variables for character
+	public var character:Image;
   	var charX:Float = 30;
   	var charY:Float = 540;
   	var charXPos:Int = 0;
   	var charYPos:Int = 0;  	
-  	var groundBounds:Rectangle;
-  	var deltaX:Float = 0;
+	var deltaX:Float = 0;
   	var deltaY:Float = 0;
+	private var characterInfo : CharacterInformation;
+	private var hasKey:Bool;
+	// static inline effectively marks these as "constants"
+  	public static inline var gravityCoefficient:Int = 6;
+  	public static inline var movementCoefficient:Float = 10;
+	
+  	var groundBounds:Rectangle;
+
   	var jumpLock:Bool = false;
   	var thisLevel = 0;
   	var counter = 0;
@@ -65,13 +68,11 @@ var groundFloor:Ground;
 		
 		map = new GameMap();
 		map.x = -getSectorOffset(1, true);
+		currentSprite.addChild(map);	
 		
-		currentSprite.addChild(map);		
-	    character = new Image(Root.assets.getTexture('lizard'));
-		character.smoothing = "none";
-	    character.x = charX;
-	    character.y = charY;
-	    currentSprite.addChild(character);
+		initializeChar();
+		
+
 
 	    //spawn the ground and level 0
 		createGroundLevels();
@@ -339,7 +340,6 @@ var groundFloor:Ground;
 		}		
 	}
 	
-	
 	public function addBaby(xPos: Int, yPos: Int, texture: String) {
 		// for adding babies. Need the x and y coordinates and a texture name
 		var b = new Baby(xPos, yPos, texture);
@@ -347,13 +347,16 @@ var groundFloor:Ground;
 		currentSprite.addChild(b.me);
 	}
 	
-	public function addPlatform(xPos: UInt, yPos: UInt, texture: String) {
-		// for adding platforms and other stuff you can't interact with
-		var obj = new Image(Root.assets.getTexture(texture));
-		obj.x = xPos;
-		obj.y = yPos;
-		//collisionMap[xPos][yPos] = 1; // add collision detection
-		platforms.push(obj);
-		addChild(obj);
+	public function initializeChar() {
+		// initialize lives
+		characterInfo = { lives : 3, text : new TextField(1150, 50, "Lives: " + 3, "PNoir", 20) };
+		currentSprite.addChild(characterInfo.text);
+
+		// initialize sprite
+	    character = new Image(Root.assets.getTexture('lizard'));
+		character.smoothing = "none";
+	    character.x = charX;
+	    character.y = charY;
+	    currentSprite.addChild(character);
 	}
 }
