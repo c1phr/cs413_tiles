@@ -25,8 +25,11 @@ class Game extends Sprite{
 	private var items: List<Item>;
 	private var levelGen:LevelGen;
 	
+	//Images
   	public var objectArrow:Image;
   	public var ground:Image;
+  	public var door:Image;
+  	public var key:Image;
 
   	//Current coords for characters
   	var charX:Float = 30;
@@ -169,41 +172,50 @@ class Game extends Sprite{
 
 	private function createMenu()
 	{
+
+		door = new Image(Root.assets.getTexture('door'));
+		door.x = getSectorOffset(1, true) + 64;
+		door.y = (sWidth - (32*11));
+
+		key = new Image(Root.assets.getTexture('key_red'));
+		key.x = getSectorOffset(1, true) + (sWidth - (key.width * 10 ));
+		key.y = (sWidth - (64*3));
+		key.scaleX += 1;
+		key.scaleY += 1;
+
 		this.objectArrow = new Image(Root.assets.getTexture('white-arrow'));
 		this.objectArrow.x = getSectorOffset(1, true) + (sWidth - this.objectArrow.width);
-		this.objectArrow.y = getSectorYCenter(0, this.objectArrow.height);
+		this.objectArrow.y = getSectorYCenter(0, this.objectArrow.height - 100);
 
-		var objectArrowText:TextField = new TextField(150, 64, "Objectives", "PNoir", 16, 0x000000);
+		var objectArrowText:TextField = new TextField(150, 64, "Level 1", "PNoir", 16, 0x000000);
 		objectArrowText.x = getSectorOffset(1, true) + (sWidth - objectArrowText.width);
-		objectArrowText.y = getSectorYCenter(0, objectArrowText.height);
+		objectArrowText.y = getSectorYCenter(0, objectArrowText.height - 100);
 
 		map.addChild(objectArrow);
 		map.addChild(objectArrowText);
+		map.addChild(door);
+		map.addChild(key);
 
 		levelGen = new LevelGen();
 		levelGen.generate(Levels.Level0, currentSprite);
+		ObjectiveMenuText();
 	}
 
 	private function ObjectiveMenuText(){
 		var objectiveHeader:TextField = new TextField(200, 100, "Game Objectives:", "PNoir", 30, 0x000000);
-		objectiveHeader.x = getSectorXCenter(2, objectiveHeader.width);
-		objectiveHeader.y = getSectorYCenter(0, objectiveHeader.height * 2);
+		objectiveHeader.x = getSectorXCenter(1, objectiveHeader.width);
+		objectiveHeader.y = 10;
 
-		var objectiveOne:TextField = new TextField(400, 100, "- Search for the Baby Lizards", "PNoir", 20, 0x000000);
-		objectiveOne.x = getSectorXCenter(2, objectiveOne.width);
-		objectiveOne.y = getSectorYCenter(0, objectiveOne.height);
+		var objectiveOne:TextField = new TextField(400, 100, "- Move with W, A, S, D. Use spacebar to jump!", "PNoir", 20, 0x000000);
+		objectiveOne.x = getSectorXCenter(1, objectiveOne.width);
+		objectiveOne.y = 110;
 
-		var objectiveTwo:TextField = new TextField(400, 100, "- Collect items from each Lizard", "PNoir", 20, 0x000000);
-		objectiveTwo.x = getSectorXCenter(2, objectiveTwo.width);
-		objectiveTwo.y = getSectorYCenter(0, objectiveTwo.height - 100);
-
-		var objectiveThree:TextField = new TextField(400, 100, "- Use the items to solve the mystery (Click item to use it)", "PNoir", 20, 0x000000);
-		objectiveThree.x = getSectorXCenter(2, objectiveThree.width);
-		objectiveThree.y = getSectorYCenter(0, objectiveThree.height - 200);
+		var objectiveTwo:TextField = new TextField(400, 100, "- Collect the keys to open the door and to advance to the next level.", "PNoir", 20, 0x000000);
+		objectiveTwo.x = getSectorXCenter(1, objectiveTwo.width);
+		objectiveTwo.y =210;
 		map.addChild(objectiveHeader);
 		map.addChild(objectiveOne);
 		map.addChild(objectiveTwo);
-		map.addChild(objectiveThree);
 	}
 
 	// Sector helpers: Full game world starts at sector (0,0) in the top left corner
