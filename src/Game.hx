@@ -103,11 +103,17 @@ class Game extends Sprite{
 				if (character.y <= platformRect.top)
 				{									
 					platformTopCollision = true; // Character collided with the top of a platform
+					if (platform.hasSpikes)
+					{
+						character.x = charX;
+						character.y = charY;
+					}
 				}
 				if (character.y + character.height >= platformRect.bottom)
 				{									
 					platformBottomCollision = true; // Character collided with the bottom of a platform
-				}
+				}				
+				
 				break; // If we collided with a platform, we don't need to keep looking
 			}
 		}

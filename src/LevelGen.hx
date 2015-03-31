@@ -5,6 +5,7 @@ import starling.display.Image;
 class LevelGen
 {
 	public var platforms:List<Platform>;
+	private var newPlat:Platform;
 
 	public function new()
 	{
@@ -24,7 +25,14 @@ class LevelGen
 			{				
 				if (level[yPlat][xPlat] > 0)
 				{
-					var newPlat = new Platform(xPlat * 64, (yPlat * 64)+32, level[yPlat][xPlat]);
+					if (level[yPlat][xPlat] > 4)
+					{
+						newPlat = new Platform(xPlat * 64, (yPlat * 64)+32, level[yPlat][xPlat]-4, true);
+					}
+					else
+					{
+						newPlat = new Platform(xPlat * 64, (yPlat * 64)+32, level[yPlat][xPlat]);
+					}					
 					platforms.add(newPlat);
 					currentSprite.addChild(newPlat);					
 				}

@@ -21,6 +21,7 @@ class Root extends Sprite {
 		assets.enqueue("assets/grass.png");
 		assets.enqueue("assets/white-arrow.png");
 		assets.enqueue("assets/platform1.png", "assets/platform2.png", "assets/platform3.png", "assets/platform4.png");
+		assets.enqueue("assets/spikes.png");
 		//assets.enqueue("assets/map1.tmx");
 		assets.enqueue("assets/door.png");
 		assets.enqueue("assets/key_red.gif");
