@@ -1,5 +1,4 @@
-import starling.display.Sprite;
-import starling.display.Image;
+import starling.display.*;
 import starling.events.Event;
 import starling.text.TextField;
 import starling.events.KeyboardEvent;
@@ -47,8 +46,14 @@ class Game extends Sprite{
   	var thisLevel = 0;
   	var counter = 0;
 
+	var key0X: Float;
+	var key0Y: Float;
+	var invX: Float;
+	var invY: Float;
+	
   	var levelTransition:Bool = false;
-var groundFloor:Ground;
+	var groundFloor:Ground;
+	
   	//Global variables for height and width
 	var sWidth:Int = Starling.current.stage.stageWidth;
 	var sHeight:Int = Starling.current.stage.stageHeight;
@@ -72,11 +77,12 @@ var groundFloor:Ground;
 		
 		initializeChar();
 		
-
-
 	    //spawn the ground and level 0
 		createGroundLevels();
 		level0();
+		
+		// create inv
+		initializeInv();
 
 	    Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDown);
 	    Starling.current.stage.addEventListener(KeyboardEvent.KEY_UP, keyUp);
@@ -188,23 +194,29 @@ var groundFloor:Ground;
 		}
 
 		if(hasKey == false && characterBounds.intersects(key.getBounds(currentSprite))){
+			// character picks up key
 			key.removeFromParent();
+			currentSprite.addChild(key);
+			key.x = invX;
+			key.y = invY;
 			hasKey = true;
+			
+			
 		}
 	}
 
 	private function level0()
 	{
-
-
 		//add in the first door/key
 		door = new Image(Root.assets.getTexture('door'));
 		door.x = getSectorOffset(1, true) + 64;
 		door.y = (sWidth - (32*11));
 
 		key = new Image(Root.assets.getTexture('key_red'));
-		key.x = getSectorOffset(1, true) + (sWidth - (key.width * 10 ));
-		key.y = (sWidth - (64*3));
+		key0X = getSectorOffset(1, true) + (sWidth - (key.width * 10 ));
+		key0Y = (sWidth - (64*3));
+		key.x = key0X;
+		key.y = key0Y;
 		key.scaleX += 1;
 		key.scaleY += 1;
 
@@ -308,6 +320,7 @@ var groundFloor:Ground;
 			if(character.bounds.intersects(door.getBounds(currentSprite))){
 				if(hasKey){
 					levelGen.destroy();
+					key.removeFromParent();
 					nextLevel(++thisLevel);
 				}
 			}
@@ -341,6 +354,8 @@ var groundFloor:Ground;
 			characterInfo.lives--;
 			characterInfo.text.text = "Lives: " + Std.string(characterInfo.lives);
 			map.addChild(key);
+			key.x = key0X;
+			key.y = key0Y;
 			hasKey = false;
 		}
 		else {
@@ -348,7 +363,6 @@ var groundFloor:Ground;
 			character.x = charX;
 			character.y = charY;
 		}
-
 	}
 	
 	public function addBaby(xPos: Int, yPos: Int, texture: String) {
@@ -360,7 +374,8 @@ var groundFloor:Ground;
 	
 	public function initializeChar() {
 		// initialize lives
-		characterInfo = { lives : 3, text : new TextField(1150, 50, "Lives: " + 3, "PNoir", 20) };
+		characterInfo = { lives : 3, text : new TextField(100, 50, "Lives: " + 3, "PNoir", 20) };
+		characterInfo.text.x = sWidth - characterInfo.text.width;
 		currentSprite.addChild(characterInfo.text);
 
 		// initialize sprite
@@ -369,5 +384,15 @@ var groundFloor:Ground;
 	    character.x = charX;
 	    character.y = charY;
 	    currentSprite.addChild(character);
+	}
+	
+	public function initializeInv() {
+		var keyBox = new Quad(50, 50, 0xFFFFFF);
+		keyBox.x = sWidth - keyBox.width - 5;
+		keyBox.y = sHeight - keyBox.height - 5;
+		// invY and invX are used to put the key in the inventory.
+		invY = keyBox.y + (keyBox.height / 2) - 5;
+		invX = keyBox.x + (keyBox.width / 2) - 5;
+		currentSprite.addChild(keyBox);
 	}
 }
