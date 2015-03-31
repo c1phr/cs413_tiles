@@ -26,10 +26,10 @@ class Game extends Sprite{
 	private var levelGen:LevelGen;
 	
 	//Images
-  	public var objectArrow:Image;
-  	public var ground:Image;
-  	public var door:Image;
-  	public var key:Image;
+  	private var objectArrow:Image;
+  	private var ground:Image;
+  	private var door:Image;
+  	private var key:Image;
   	private var hasKey:Bool;
 
   	//Current coords for characters
@@ -75,7 +75,7 @@ class Game extends Sprite{
 	    
 		//addBaby(300, 550, "baby1");
 		
-		createMenu();
+		level0();
 	    //this.items.add(new Item(this.currentSprite, "dummy-item", 50, 50));
 
 	    Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDown);
@@ -180,9 +180,10 @@ class Game extends Sprite{
 
 	}
 
-	private function createMenu()
+	private function level0()
 	{
 
+		//add in the first door/key
 		door = new Image(Root.assets.getTexture('door'));
 		door.x = getSectorOffset(1, true) + 64;
 		door.y = (sWidth - (32*11));
@@ -193,6 +194,7 @@ class Game extends Sprite{
 		key.scaleX += 1;
 		key.scaleY += 1;
 
+		//Generate the next level arrow
 		this.objectArrow = new Image(Root.assets.getTexture('white-arrow'));
 		this.objectArrow.x = getSectorOffset(1, true) + (sWidth - this.objectArrow.width);
 		this.objectArrow.y = getSectorYCenter(0, this.objectArrow.height - 100);
@@ -206,12 +208,11 @@ class Game extends Sprite{
 		map.addChild(door);
 		map.addChild(key);
 
+		//Generate the level 0
 		levelGen = new LevelGen();
 		levelGen.generate(Levels.Level0, currentSprite);
-		ObjectiveMenuText();
-	}
 
-	private function ObjectiveMenuText(){
+		//Generate the objective text
 		var objectiveHeader:TextField = new TextField(200, 100, "Game Objectives:", "PNoir", 30, 0x000000);
 		objectiveHeader.x = getSectorXCenter(1, objectiveHeader.width);
 		objectiveHeader.y = 10;
@@ -222,10 +223,15 @@ class Game extends Sprite{
 
 		var objectiveTwo:TextField = new TextField(400, 100, "- Collect the keys to open the door and to advance to the next level.", "PNoir", 20, 0x000000);
 		objectiveTwo.x = getSectorXCenter(1, objectiveTwo.width);
-		objectiveTwo.y =210;
+		objectiveTwo.y =150;
+		var objectiveThree:TextField = new TextField(400, 100, "- Press spacebar on the door in order to open it with the key.", "PNoir", 20, 0x000000);
+		objectiveThree.x = getSectorXCenter(1, objectiveThree.width);
+		objectiveThree.y =210;
 		map.addChild(objectiveHeader);
 		map.addChild(objectiveOne);
 		map.addChild(objectiveTwo);
+		map.addChild(objectiveThree);
+
 	}
 
 	// Sector helpers: Full game world starts at sector (0,0) in the top left corner
@@ -274,6 +280,8 @@ class Game extends Sprite{
 				if(hasKey){
 					levelGen.destroy();
 					hasKey = false;
+					character.x = getSectorOffset(2, true);
+					character.y = charY;
 				}
 			}
 			else{
