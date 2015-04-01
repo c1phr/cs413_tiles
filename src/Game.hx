@@ -82,6 +82,7 @@ class Game extends Sprite{
 		
 	    //spawn the ground and level 0
 		createGroundLevels();
+		levelCredits();
 		level0();
 		
 		// create inv
@@ -90,7 +91,6 @@ class Game extends Sprite{
 	    Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDown);
 	    Starling.current.stage.addEventListener(KeyboardEvent.KEY_UP, keyUp);
 		currentSprite.addEventListener(EnterFrameEvent.ENTER_FRAME, frameUpdate);
-
 	}
 
 	private function createGroundLevels(){
@@ -104,11 +104,9 @@ class Game extends Sprite{
 		groundFloor = new Ground(getSectorOffset(x, true), Starling.current.stage.stageHeight - 64);
 		map.addChild(groundFloor);
 		}
-
 	}
 
-	private function frameUpdate(event:EnterFrameEvent){
-		
+	private function frameUpdate(event:EnterFrameEvent) {
 		var sWidth = Starling.current.stage.stageWidth;
 		var sHeight = Starling.current.stage.stageHeight;		
 		var characterBounds:Rectangle = character.bounds;		
@@ -140,28 +138,26 @@ class Game extends Sprite{
 		// If the character isn't on the ground, handle other collisions
 		if (!characterBounds.intersects(groundBounds))
 		{
+			if (deltaY < 0 && !platformBottomCollision) // Jumping up
+			{
+				deltaY += 1;					
+			}				
+			else if (!platformTopCollision) // Falling down
+			{	
+				character.y += gravityCoefficient;					
+			}
 
-				if (deltaY < 0 && !platformBottomCollision) // Jumping up
-				{
-					deltaY += 1;					
-				}				
-				else if (!platformTopCollision) // Falling down
-				{	
-					character.y += gravityCoefficient;					
-				}
-
-				else if (platformTopCollision) // We landed on a platform
-				{
-
-					deltaY = 0;
-					jumpLock = false; // On a platform, unlock jumping
-				}								
-				if (platformBottomCollision) // We hit our head on the bottom of a platform
-				{
-					// trace("what" + (++counter));		
-					deltaY = 0;
-					character.y += gravityCoefficient;
-				}
+			else if (platformTopCollision) // We landed on a platform
+			{
+				deltaY = 0;
+				jumpLock = false; // On a platform, unlock jumping
+			}								
+			if (platformBottomCollision) // We hit our head on the bottom of a platform
+			{
+				// trace("what" + (++counter));		
+				deltaY = 0;
+				character.y += gravityCoefficient;
+			}
 		}	
 
 		else if (jumpLock && deltaY == 0) // Fell down and hit the ground, unlock jumping
@@ -201,12 +197,32 @@ class Game extends Sprite{
 			currentSprite.addChild(key);
 			key.x = invX;
 			key.y = invY;
-			hasKey = true;
-			
-			
+			hasKey = true;	
 		}
 	}
 
+	private function levelCredits() {
+		//Generate the objective text
+		var objectiveHeader:TextField = new TextField(200, 100, "Game Objectives:", "PNoir", 30, 0x000000);
+		objectiveHeader.x = getSectorXCenter(2, objectiveHeader.width);
+		objectiveHeader.y = 10;
+
+		var objectiveOne:TextField = new TextField(400, 100, "- Move with W, A, S, D. Use spacebar to jump!", "PNoir", 20, 0x000000);
+		objectiveOne.x = getSectorXCenter(2, objectiveOne.width);
+		objectiveOne.y = 110;
+
+		var objectiveTwo:TextField = new TextField(400, 100, "- Collect the keys to open the door and to advance to the next level.", "PNoir", 20, 0x000000);
+		objectiveTwo.x = getSectorXCenter(2, objectiveTwo.width);
+		objectiveTwo.y =150;
+		var objectiveThree:TextField = new TextField(400, 100, "- Press spacebar on the door in order to open it with the key.", "PNoir", 20, 0x000000);
+		objectiveThree.x = getSectorXCenter(2, objectiveThree.width);
+		objectiveThree.y =210;
+		map.addChild(objectiveHeader);
+		map.addChild(objectiveOne);
+		map.addChild(objectiveTwo);
+		map.addChild(objectiveThree);
+	}
+	
 	private function level0()
 	{
 		//add in the first door/key
@@ -227,7 +243,7 @@ class Game extends Sprite{
 		this.objectArrow.x = getSectorOffset(1, true) + (sWidth - this.objectArrow.width);
 		this.objectArrow.y = getSectorYCenter(0, this.objectArrow.height - 100);
 
-		var objectArrowText:TextField = new TextField(150, 64, "Level 1", "PNoir", 16, 0x000000);
+		var objectArrowText:TextField = new TextField(150, 64, "Instructions", "PNoir", 16, 0x000000);
 		objectArrowText.x = getSectorOffset(1, true) + (sWidth - objectArrowText.width);
 		objectArrowText.y = getSectorYCenter(0, objectArrowText.height - 100);
 
@@ -239,27 +255,12 @@ class Game extends Sprite{
 		//Generate the level 0
 		levelGen = new LevelGen();
 		levelGen.generate(Levels.Level0, currentSprite);
-
-		//Generate the objective text
-		var objectiveHeader:TextField = new TextField(200, 100, "Game Objectives:", "PNoir", 30, 0x000000);
-		objectiveHeader.x = getSectorXCenter(1, objectiveHeader.width);
-		objectiveHeader.y = 10;
-
-		var objectiveOne:TextField = new TextField(400, 100, "- Move with W, A, S, D. Use spacebar to jump!", "PNoir", 20, 0x000000);
-		objectiveOne.x = getSectorXCenter(1, objectiveOne.width);
-		objectiveOne.y = 110;
-
-		var objectiveTwo:TextField = new TextField(400, 100, "- Collect the keys to open the door and to advance to the next level.", "PNoir", 20, 0x000000);
-		objectiveTwo.x = getSectorXCenter(1, objectiveTwo.width);
-		objectiveTwo.y =150;
-		var objectiveThree:TextField = new TextField(400, 100, "- Press spacebar on the door in order to open it with the key.", "PNoir", 20, 0x000000);
-		objectiveThree.x = getSectorXCenter(1, objectiveThree.width);
-		objectiveThree.y =210;
-		map.addChild(objectiveHeader);
-		map.addChild(objectiveOne);
-		map.addChild(objectiveTwo);
-		map.addChild(objectiveThree);
-
+		
+		// title
+		var title: TextField = new TextField(400, 100, "Find Carlos", "stitch", 60, 0x000000);
+		title.x = getSectorXCenter(1, title.width);
+		title.y = 10;
+		map.addChild(title);
 	}
 
 	private function nextLevel(level:Int)
