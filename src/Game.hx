@@ -3,6 +3,8 @@ import starling.events.Event;
 import starling.text.TextField;
 import starling.events.KeyboardEvent;
 import starling.events.EnterFrameEvent;
+
+import starling.animation.Transitions;
 import flash.geom.Rectangle;
 import Math.*;
 import starling.core.Starling;
@@ -28,6 +30,9 @@ class Game extends Sprite{
 	
   	//initial variables for character
 	public var character:Image;
+	// first starting point
+	var initX:Float = 30;
+	var initY:Float = 540;
   	var charX:Float = 30;
   	var charY:Float = 540;
   	var charXPos:Int = 0;
@@ -352,7 +357,7 @@ class Game extends Sprite{
 	}
 	
 	public function loseLife() {
-		if (characterInfo.lives > 0) {
+		if (characterInfo.lives > 1) {
 			// reset character
 			character.x = charX;
 			character.y = charY;
@@ -365,8 +370,22 @@ class Game extends Sprite{
 		}
 		else {
 			// game over
-			character.x = charX;
-			character.y = charY;
+			var gameOver = new Image(Root.assets.getTexture("gameover"));
+			currentSprite.addChild(gameOver);
+			Starling.juggler.tween(gameOver, 1.0, {
+					transition:Transitions.EASE_OUT, delay:1, alpha: 0, onComplete: function() {
+					// reset game:
+					character.x = initX;
+					character.y = initY;
+					characterInfo.lives = 3;
+					characterInfo.text.text = "Lives: " + Std.string(characterInfo.lives);
+					map.addChild(key);
+					key.x = key0X;
+					key.y = key0Y;
+					hasKey = false;
+					gameOver.removeFromParent();
+				}
+			});
 		}
 	}
 	
@@ -386,8 +405,8 @@ class Game extends Sprite{
 		// initialize sprite
 	    character = new Image(Root.assets.getTexture('lizard'));
 		character.smoothing = "none";
-	    character.x = charX;
-	    character.y = charY;
+	    character.x = initX;
+	    character.y = initY;
 	    currentSprite.addChild(character);
 	}
 	

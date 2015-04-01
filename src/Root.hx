@@ -20,7 +20,7 @@ class Root extends Sprite {
 		assets.enqueue("assets/Stitch.fnt", "assets/Stitch.png");
     	assets.enqueue("assets/lizard.png", "assets/baby1.png");
 		assets.enqueue("assets/grass.png");
-		assets.enqueue("assets/white-arrow.png");
+		assets.enqueue("assets/white-arrow.png", "assets/gameover.png");
 		assets.enqueue("assets/platform1.png", "assets/platform2.png", "assets/platform3.png", "assets/platform4.png");
 		assets.enqueue("assets/spikes.png");
 		assets.enqueue("assets/door.png");
