@@ -17,9 +17,8 @@ class Game extends Sprite{
   	
   	public var map:GameMap;
 	public var tiles:Tilemap; 
-	
-	private var babies : Array<Baby>; // array of babies	
-	private var items: List<Item>;
+		
+	private var items: List<Item>; // use this for keys?
 	private var levelGen:LevelGen;
 	
 	//Images
@@ -33,8 +32,8 @@ class Game extends Sprite{
 	// first starting point
 	var initX:Float = 30;
 	var initY:Float = 540;
-  	var charX:Float = 30;
-  	var charY:Float = 540;
+	
+	var currentLevel: Int;
   	var charXPos:Int = 0;
   	var charYPos:Int = 0;  	
 	var deltaX:Float = 0;
@@ -66,7 +65,6 @@ class Game extends Sprite{
 	public function new(currentSprite:Sprite){
 		super();
 		this.currentSprite = currentSprite;
-		babies = new Array();
 		this.items = new List<Item>();		
 	}
 
@@ -230,6 +228,7 @@ class Game extends Sprite{
 	
 	private function level0()
 	{
+		currentLevel = 0;
 		//add in the first door/key
 		door = new Image(Root.assets.getTexture('door'));
 		door.x = getSectorOffset(1, true) + 64;
@@ -271,10 +270,11 @@ class Game extends Sprite{
 	private function nextLevel(level:Int)
 	{
 		trace(level);
+		currentLevel++;
 		levelGen.destroy();
 		//Set the character forward one level.
 		character.x = getSectorOffset((level+1), true);
-		character.y = charY;
+		character.y = initY;
 		switch(level){
 			case 1:
 				levelGen.generate(Levels.Level1, currentSprite);				
@@ -359,14 +359,7 @@ class Game extends Sprite{
 	public function loseLife() {
 		if (characterInfo.lives > 1) {
 			// reset character
-			character.x = charX;
-			character.y = charY;
-			characterInfo.lives--;
-			characterInfo.text.text = "Lives: " + Std.string(characterInfo.lives);
-			map.addChild(key);
-			key.x = key0X;
-			key.y = key0Y;
-			hasKey = false;
+			resetGame("death");
 		}
 		else {
 			// game over
@@ -374,25 +367,40 @@ class Game extends Sprite{
 			currentSprite.addChild(gameOver);
 			Starling.juggler.tween(gameOver, 1.0, {
 					transition:Transitions.EASE_OUT, delay:1, alpha: 0, onComplete: function() {
-					// reset game:
-					character.x = initX;
-					character.y = initY;
-					characterInfo.lives = 3;
-					characterInfo.text.text = "Lives: " + Std.string(characterInfo.lives);
-					map.addChild(key);
-					key.x = key0X;
-					key.y = key0Y;
-					hasKey = false;
+					resetGame("fail");
 					gameOver.removeFromParent();
 				}
 			});
 		}
 	}
 	
+	public function resetGame(reason: String) {
+		// pass "fail" for game over, "death" otherwise
+		map.addChild(key);
+		key.x = key0X;
+		key.y = key0Y;
+		hasKey = false;
+		if (reason == "fail") {
+			// go back to main screen
+			character.x = initX;
+			character.y = initY;
+			characterInfo.lives = 3;
+			characterInfo.text.text = "Lives: " + Std.string(characterInfo.lives);
+		}
+		else {
+			// back to beginning of THIS screen
+			character.x = getSectorOffset(currentLevel, true);
+			character.y = initY;
+			characterInfo.lives--;
+			characterInfo.text.text = "Lives: " + Std.string(characterInfo.lives);
+		}
+		
+		
+	}
+	
 	public function addBaby(xPos: Int, yPos: Int, texture: String) {
-		// for adding babies. Need the x and y coordinates and a texture name
+		// for adding the baby. Need the x and y coordinates and a texture name
 		var b = new Baby(xPos, yPos, texture);
-		babies.push(b); // add to the baby array
 		currentSprite.addChild(b.me);
 	}
 	
