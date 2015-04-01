@@ -17,6 +17,7 @@ class Root extends Sprite {
 	public function start(startup:Startup) {
 		assets = new AssetManager();
 		assets.enqueue("assets/PixelNoir.fnt", "assets/PixelNoir.png");
+		assets.enqueue("assets/Stitch.fnt", "assets/Stitch.png");
     	assets.enqueue("assets/lizard.png", "assets/baby1.png");
 		assets.enqueue("assets/grass.png");
 		assets.enqueue("assets/white-arrow.png");
@@ -33,7 +34,9 @@ class Root extends Sprite {
 					transition:Transitions.EASE_OUT, delay:0, alpha: 0, onComplete: function() {
 						startup.removeChild(startup.loadingBitmap);
 						TextField.registerBitmapFont(new BitmapFont(assets.getTexture("PixelNoir.png"),
-											assets.getXml("PixelNoir.fnt")),"PNoir");
+											assets.getXml("PixelNoir.fnt")), "PNoir");
+						TextField.registerBitmapFont(new BitmapFont(assets.getTexture("Stitch.png"), 
+											assets.getXml("Stitch.fnt")), "stitch");
 						var game = new Game(rootSprite);
 						game.start();
 					}
