@@ -71,6 +71,9 @@ class Game extends Sprite{
 		currentSprite.addChild(tiles);
 		tiles.y = 32;
 		
+		// map2 = same map with hole in the right edge
+		// map3 = same map with hole in the left edge
+		
 		map = new GameMap();
 		map.x = -getSectorOffset(1, true);
 		currentSprite.addChild(map);	
