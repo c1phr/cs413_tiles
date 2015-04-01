@@ -184,8 +184,7 @@ class Game extends Sprite{
 
 		if(character.x >= (sWidth-character.width)){
 			map.x -= sWidth;
-			character.x = 0;
-			levelGen.destroy();
+			character.x = 0;			
 		}
 		if(character.y >= sHeight){
 			map.y -= sHeight;
@@ -265,16 +264,18 @@ class Game extends Sprite{
 
 	private function nextLevel(level:Int)
 	{
+		trace(level);
+		levelGen.destroy();
 		//Set the character forward one level.
 		character.x = getSectorOffset((level+1), true);
 		character.y = charY;
 		switch(level){
 			case 1:
-				//Enter level 1 information
+				levelGen.generate(Levels.Level1, currentSprite);				
 			case 2:
-				//Enter level 2 information
+				levelGen.generate(Levels.Level2, currentSprite);
 			case 3: 
-				//Enter level 3 information
+				levelGen.generate(Levels.Level3, currentSprite);
 		}
 	}
 
@@ -321,8 +322,7 @@ class Game extends Sprite{
 
 		if(keycode == 32 && !jumpLock){
 			if(character.bounds.intersects(door.getBounds(currentSprite))){
-				if(hasKey){
-					levelGen.destroy();
+				if(hasKey){					
 					key.removeFromParent();
 					nextLevel(++thisLevel);
 				}
@@ -330,6 +330,7 @@ class Game extends Sprite{
 			else{
 				jumpLock = true;	
 				deltaY = -movementCoefficient * 1.5;
+				trace(character.x);
 			}
 
 		}
