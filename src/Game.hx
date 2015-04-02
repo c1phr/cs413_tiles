@@ -9,6 +9,8 @@ import flash.geom.Rectangle;
 import Math.*;
 import starling.core.Starling;
 
+import haxe.Timer;
+
 typedef CharacterInformation = { lives : Int, text : TextField }
 
 class Game extends Sprite{
@@ -60,6 +62,12 @@ class Game extends Sprite{
 	var groundFloor:Ground;
 
 	var hasBaby:Bool = false;
+
+	private var count:Int = 0;
+
+	//create timer
+	var timer = new haxe.Timer(1000);
+	var timestamp: Float;
 	
   	//Global variables for height and width
 	var sWidth:Int = Starling.current.stage.stageWidth;
@@ -96,6 +104,11 @@ class Game extends Sprite{
 		// create inv
 		initializeInv();
 
+		//run timer
+		//count = 0;
+		timer.run = time;
+		timer.run();
+
 		//adding a baby for testing
 		//baby = addBaby(320, 320, "baby1");
 
@@ -125,14 +138,15 @@ class Game extends Sprite{
 		var platformTopCollision:Bool = false;
 		var platformBottomCollision:Bool = false;
 		
-
 		// Check for collisions with platforms
 		for (platform in levelGen.platforms)
 		{
+
 			var babyBounds:Rectangle = baby.bounds;
 			//babyBounds.getBounds(currentSprite);
 			if(characterBounds.intersects(babyBounds)){
 				currentSprite.removeChild(baby);
+				timer.stop();
 				winGame();
 				
 			}
@@ -410,6 +424,7 @@ class Game extends Sprite{
 			currentSprite.addChild(baby);
 			baby.x = 320;
 			baby.y = 320;
+			//timer.run();
 		}
 		else {
 			// back to beginning of THIS screen
@@ -457,10 +472,18 @@ class Game extends Sprite{
 		currentSprite.addChild(win);
 		Starling.juggler.tween(win, 1.0, {
 					transition:Transitions.EASE_OUT, delay:1, alpha: 0, onComplete: function() {
+					//timer.stop();
 					resetGame("fail");
 					win.removeFromParent();
-
+					//start();
 					}
 				});
+	}
+
+	public function time(){
+		//var count:Int = 0;
+		trace(count);
+		count++;
+		//timer.stamp();
 	}
 }
