@@ -26,6 +26,7 @@ class Game extends Sprite{
   	private var ground:Image;
   	private var door:Image;
   	private var key:Image;
+  	private var baby:Image;
 	
   	//initial variables for character
 	public var character:Image;
@@ -57,6 +58,8 @@ class Game extends Sprite{
 	
   	var levelTransition:Bool = false;
 	var groundFloor:Ground;
+
+	var hasBaby:Bool = false;
 	
   	//Global variables for height and width
 	var sWidth:Int = Starling.current.stage.stageWidth;
@@ -69,6 +72,8 @@ class Game extends Sprite{
 	}
 
 	public function start() {	
+
+		
 		
 		var tiles = new Tilemap(Root.assets, "map1");
 		currentSprite.addChild(tiles);
@@ -91,9 +96,13 @@ class Game extends Sprite{
 		// create inv
 		initializeInv();
 
+		//adding a baby for testing
+		//baby = addBaby(320, 320, "baby1");
+
 	    Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDown);
 	    Starling.current.stage.addEventListener(KeyboardEvent.KEY_UP, keyUp);
 		currentSprite.addEventListener(EnterFrameEvent.ENTER_FRAME, frameUpdate);
+
 	}
 
 	private function createGroundLevels(){
@@ -115,10 +124,18 @@ class Game extends Sprite{
 		var characterBounds:Rectangle = character.bounds;		
 		var platformTopCollision:Bool = false;
 		var platformBottomCollision:Bool = false;
+		
 
 		// Check for collisions with platforms
 		for (platform in levelGen.platforms)
 		{
+			var babyBounds:Rectangle = baby.bounds;
+			//babyBounds.getBounds(currentSprite);
+			if(characterBounds.intersects(babyBounds)){
+				currentSprite.removeChild(baby);
+				winGame();
+				
+			}
 			// Get the platform bounds in the coordinate-space of the currentSprite
 			var platformRect = platform.texture.getBounds(currentSprite);
 			if (characterBounds.intersects(platformRect) && !levelTransition)
@@ -201,6 +218,8 @@ class Game extends Sprite{
 			key.y = invY;
 			hasKey = true;	
 		}
+
+		
 	}
 
 	private function levelCredits() {
@@ -264,6 +283,11 @@ class Game extends Sprite{
 		title.x = getSectorXCenter(1, title.width);
 		title.y = 10;
 		map.addChild(title);
+
+		baby = new Image(Root.assets.getTexture("baby1"));
+		currentSprite.addChild(baby);
+		baby.x = 320;
+		baby.y = 320;
 	}
 
 	private function nextLevel(level:Int)
@@ -383,6 +407,9 @@ class Game extends Sprite{
 			character.y = initY;
 			characterInfo.lives = 3;
 			characterInfo.text.text = "Lives: " + Std.string(characterInfo.lives);
+			currentSprite.addChild(baby);
+			baby.x = 320;
+			baby.y = 320;
 		}
 		else {
 			// back to beginning of THIS screen
@@ -398,7 +425,7 @@ class Game extends Sprite{
 	public function addBaby(xPos: Int, yPos: Int, texture: String) {
 		// for adding the baby. Need the x and y coordinates and a texture name
 		var b = new Baby(xPos, yPos, texture);
-		currentSprite.addChild(b.me);
+		currentSprite.addChild(b);
 	}
 	
 	public function initializeChar() {
@@ -423,5 +450,17 @@ class Game extends Sprite{
 		invY = keyBox.y + (keyBox.height / 2) - 5;
 		invX = keyBox.x + (keyBox.width / 2) - 5;
 		currentSprite.addChild(keyBox);
+	}
+
+	public function winGame(){
+		var win = new Image(Root.assets.getTexture("win"));
+		currentSprite.addChild(win);
+		Starling.juggler.tween(win, 1.0, {
+					transition:Transitions.EASE_OUT, delay:1, alpha: 0, onComplete: function() {
+					resetGame("fail");
+					win.removeFromParent();
+
+					}
+				});
 	}
 }

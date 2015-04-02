@@ -26,7 +26,8 @@ class Root extends Sprite {
 		assets.enqueue("assets/door.png");
 		assets.enqueue("assets/key_red.gif");
 		assets.enqueue("assets/blanksky.png", "assets/treemiddle.png", "assets/treemiddle2.png", "assets/treemiddle3.png");
-		
+		assets.enqueue("assets/win.png");
+
 		assets.loadQueue(function onProgress(ratio:Float) {
 			if (ratio == 1) {
 				// fade the loading screen, start game
