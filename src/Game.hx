@@ -156,8 +156,7 @@ class Game extends Sprite{
 				jumpLock = false; // On a platform, unlock jumping
 			}								
 			if (platformBottomCollision) // We hit our head on the bottom of a platform
-			{
-				// trace("what" + (++counter));		
+			{				
 				deltaY = 0;
 				character.y += gravityCoefficient;
 			}
@@ -268,8 +267,7 @@ class Game extends Sprite{
 	}
 
 	private function nextLevel(level:Int)
-	{
-		trace(level);
+	{		
 		currentLevel++;
 		levelGen.destroy();
 		//Set the character forward one level.
@@ -335,8 +333,7 @@ class Game extends Sprite{
 			}
 			else{
 				jumpLock = true;	
-				deltaY = -movementCoefficient * 1.5;
-				trace(character.x);
+				deltaY = -movementCoefficient * 1.5;				
 			}
 
 		}
