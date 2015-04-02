@@ -33,10 +33,6 @@ class Root extends Sprite {
 				Starling.juggler.tween(startup.loadingBitmap, 1.0, {
 					transition:Transitions.EASE_OUT, delay:0, alpha: 0, onComplete: function() {
 						startup.removeChild(startup.loadingBitmap);
-						TextField.registerBitmapFont(new BitmapFont(assets.getTexture("PixelNoir.png"),
-											assets.getXml("PixelNoir.fnt")), "PNoir");
-						TextField.registerBitmapFont(new BitmapFont(assets.getTexture("Stitch.png"), 
-											assets.getXml("Stitch.fnt")), "stitch");
 						var game = new Game(rootSprite);
 						game.start();
 					}

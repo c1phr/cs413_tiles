@@ -205,20 +205,20 @@ class Game extends Sprite{
 
 	private function levelCredits() {
 		//Generate the objective text
-		var objectiveHeader:TextField = new TextField(200, 100, "Game Objectives:", "PNoir", 30, 0x000000);
+		var objectiveHeader:TextField = new TextField(200, 100, "Game Objectives:", "PixelNoir", 50, 0x000000);
 		objectiveHeader.x = getSectorXCenter(2, objectiveHeader.width);
 		objectiveHeader.y = 10;
 
-		var objectiveOne:TextField = new TextField(400, 100, "- Move with W, A, S, D. Use spacebar to jump!", "PNoir", 20, 0x000000);
+		var objectiveOne:TextField = new TextField(400, 100, "- Move with W, A, S, D. Use spacebar to jump!", "PixelNoir", 40, 0x000000);
 		objectiveOne.x = getSectorXCenter(2, objectiveOne.width);
-		objectiveOne.y = 110;
+		objectiveOne.y = 90;
 
-		var objectiveTwo:TextField = new TextField(400, 100, "- Collect the keys to open the door and to advance to the next level.", "PNoir", 20, 0x000000);
+		var objectiveTwo:TextField = new TextField(500, 100, "- Collect the keys to open the door and to advance to the next level.", "PixelNoir", 40, 0x000000);
 		objectiveTwo.x = getSectorXCenter(2, objectiveTwo.width);
-		objectiveTwo.y =150;
-		var objectiveThree:TextField = new TextField(400, 100, "- Press spacebar on the door in order to open it with the key.", "PNoir", 20, 0x000000);
+		objectiveTwo.y =160;
+		var objectiveThree:TextField = new TextField(400, 100, "- Press spacebar on the door in order to open it with the key.", "PixelNoir", 40, 0x000000);
 		objectiveThree.x = getSectorXCenter(2, objectiveThree.width);
-		objectiveThree.y =210;
+		objectiveThree.y =250;
 		map.addChild(objectiveHeader);
 		map.addChild(objectiveOne);
 		map.addChild(objectiveTwo);
@@ -246,7 +246,7 @@ class Game extends Sprite{
 		this.objectArrow.x = getSectorOffset(1, true) + (sWidth - this.objectArrow.width);
 		this.objectArrow.y = getSectorYCenter(0, this.objectArrow.height - 100);
 
-		var objectArrowText:TextField = new TextField(150, 64, "Instructions", "PNoir", 16, 0x000000);
+		var objectArrowText:TextField = new TextField(150, 64, "instructions", "PixelNoir", 30, 0x000000);
 		objectArrowText.x = getSectorOffset(1, true) + (sWidth - objectArrowText.width);
 		objectArrowText.y = getSectorYCenter(0, objectArrowText.height - 100);
 
@@ -260,7 +260,7 @@ class Game extends Sprite{
 		levelGen.generate(Levels.Level0, currentSprite);
 		
 		// title
-		var title: TextField = new TextField(400, 100, "Find Carlos", "stitch", 60, 0x000000);
+		var title: TextField = new TextField(400, 120, "Find Carlos", "Stitch", 120, 0x000000);
 		title.x = getSectorXCenter(1, title.width);
 		title.y = 10;
 		map.addChild(title);
@@ -403,7 +403,7 @@ class Game extends Sprite{
 	
 	public function initializeChar() {
 		// initialize lives
-		characterInfo = { lives : 3, text : new TextField(100, 50, "Lives: " + 3, "PNoir", 20) };
+		characterInfo = { lives : 3, text : new TextField(100, 50, "Lives: " + 3, "PixelNoir", 40) };
 		characterInfo.text.x = sWidth - characterInfo.text.width;
 		currentSprite.addChild(characterInfo.text);
 
