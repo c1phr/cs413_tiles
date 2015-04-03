@@ -82,177 +82,156 @@ class Game extends Sprite{
 	}
 
 	public function start() {
-
 		jumpSound = Root.assets.getSound("jump");
 
 		var tiles = new Tilemap(Root.assets, "map1");
 		currentSprite.addChild(tiles);
 		tiles.y = 32;
-		
+
 		// map2 = same map with hole in the right edge
 		// map3 = same map with hole in the left edge
-		
+
 		map = new GameMap();
 		map.x = -getSectorOffset(1, true);
-		currentSprite.addChild(map);	
-		
+		currentSprite.addChild(map);
+
 		initializeChar();
-		
-	    //spawn the ground and level 0
+
+		//spawn the ground and level 0
 		createGroundLevels();
 		//levelCredits();
 		level0();
-		
+
 		// create inventory
 		initializeInv();
 
 		//run timer
-		//count = 0;
-		//timer.run = time;
 
-	    Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDown);
-	    Starling.current.stage.addEventListener(KeyboardEvent.KEY_UP, keyUp);
+		Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDown);
+		Starling.current.stage.addEventListener(KeyboardEvent.KEY_UP, keyUp);
 		currentSprite.addEventListener(EnterFrameEvent.ENTER_FRAME, frameUpdate);
-		Starling.current.stage.addEventListener(EnterFrameEvent.ENTER_FRAME, time); 
-
+		Starling.current.stage.addEventListener(EnterFrameEvent.ENTER_FRAME, time);
 	}
 
-	private function createGroundLevels(){
-		groundFloor = new Ground(getSectorOffset(1, true), Starling.current.stage.stageHeight - 64);
-		map.addChild(groundFloor);
-		groundBounds = groundFloor.getBounds(currentSprite);
+	private function createGroundLevels() {
+	    groundFloor = new Ground(getSectorOffset(1, true), Starling.current.stage.stageHeight - 64);
+	    map.addChild(groundFloor);
+	    groundBounds = groundFloor.getBounds(currentSprite);
 
-		//scaffold for seven levels.
-		for ( x in 2...8)
-		{
-		groundFloor = new Ground(getSectorOffset(x, true), Starling.current.stage.stageHeight - 64);
-		map.addChild(groundFloor);
-		}
+	    //scaffold for seven levels.
+	    for (x in 2...8) {
+	        groundFloor = new Ground(getSectorOffset(x, true), Starling.current.stage.stageHeight - 64);
+	        map.addChild(groundFloor);
+	    }
 	}
 
 	private function frameUpdate(event:EnterFrameEvent) {
 
-		var sWidth = Starling.current.stage.stageWidth;
-		var sHeight = Starling.current.stage.stageHeight;		
-		var characterBounds:Rectangle = character.me.bounds;		
-		var platformTopCollision:Bool = false;
-		var platformBottomCollision:Bool = false;
-			
+	    var sWidth = Starling.current.stage.stageWidth;
+	    var sHeight = Starling.current.stage.stageHeight;
+	    var characterBounds: Rectangle = character.me.bounds;
+	    var platformTopCollision: Bool = false;
+	    var platformBottomCollision: Bool = false;
 
-		// Check for collisions with platforms
-		for (platform in levelGen.platforms)
-		{
-			//Check babybounds to see if player has won
-			var babyBounds:Rectangle = baby.bounds;
-			if(characterBounds.intersects(babyBounds)){
-				currentSprite.removeChild(baby);
-				timer.stop();
-				winGame();	
-			}
-			// Get the platform bounds in the coordinate-space of the currentSprite
-			var platformRect = platform.texture.getBounds(currentSprite);
-			if (characterBounds.intersects(platformRect) && !levelTransition)
-			{									
-				if (character.me.y <= platformRect.top)
-				{									
-					platformTopCollision = true; // Character collided with the top of a platform
-					if (platform.hasSpikes)
-					{
-						loseLife(); // character has collided with spikes
-					}
-				}
-				if (character.me.y + character.height >= platformRect.bottom)
-				{									
-					platformBottomCollision = true; // Character collided with the bottom of a platform
-				}				
-				break; // If we collided with a platform, we don't need to keep looking
-			}
-		}
-		// If the character isn't on the ground, handle other collisions
-		if (!characterBounds.intersects(groundBounds))
-		{
-			if (deltaY < 0 && !platformBottomCollision) // Jumping up
-			{
-				deltaY += 1;					
-			}				
-			else if (!platformTopCollision) // Falling down
-			{	
-				character.me.y += gravityCoefficient;					
-			}
 
-			else if (platformTopCollision) // We landed on a platform
-			{
-				deltaY = 0;
-				jumpLock = false; // On a platform, unlock jumping
-			}								
-			if (platformBottomCollision) // We hit our head on the bottom of a platform
-			{				
-				deltaY = 0;
-				character.me.y += gravityCoefficient;
-			}
-		}	
+	    // Check for collisions with platforms
+	    for (platform in levelGen.platforms) {
+	        //Check babybounds to see if player has won
+	        var babyBounds: Rectangle = baby.bounds;
+	        if (characterBounds.intersects(babyBounds)) {
+	            currentSprite.removeChild(baby);
+	            timer.stop();
+	            winGame();
+	        }
+	        // Get the platform bounds in the coordinate-space of the currentSprite
+	        var platformRect = platform.texture.getBounds(currentSprite);
+	        if (characterBounds.intersects(platformRect) && !levelTransition) {
+	            if (character.me.y <= platformRect.top) {
+	                platformTopCollision = true; // Character collided with the top of a platform
+	                if (platform.hasSpikes) {
+	                    loseLife(); // character has collided with spikes
+	                }
+	            }
+	            if (character.me.y + character.height >= platformRect.bottom) {
+	                platformBottomCollision = true; // Character collided with the bottom of a platform
+	            }
+	            break; // If we collided with a platform, we don't need to keep looking
+	        }
+	    }
+	    // If the character isn't on the ground, handle other collisions
+	    if (!characterBounds.intersects(groundBounds)) {
+	        if (deltaY < 0 && !platformBottomCollision) // Jumping up
+	        {
+	            deltaY += 1;
+	        } else if (!platformTopCollision) // Falling down
+	        {
+	            character.me.y += gravityCoefficient;
+	        } else if (platformTopCollision) // We landed on a platform
+	        {
+	            deltaY = 0;
+	            jumpLock = false; // On a platform, unlock jumping
+	        }
+	        if (platformBottomCollision) // We hit our head on the bottom of a platform
+	        {
+	            deltaY = 0;
+	            character.me.y += gravityCoefficient;
+	        }
+	    } else if (jumpLock && deltaY == 0) // Fell down and hit the ground, unlock jumping
+	    {
+	        jumpLock = false;
+	    }
+	    if (character.me.x >= 0 && character.me.x <= (sWidth - character.width)) {
+	        character.me.x += deltaX;
+	    } else if (character.me.x <= 0) {
+	        character.me.x = 0;
+	    }
 
-		else if (jumpLock && deltaY == 0) // Fell down and hit the ground, unlock jumping
-		{			
-			jumpLock = false;			
-		}		
-		if (character.me.x >= 0 && character.me.x <= (sWidth - character.width)) {
-      		character.me.x += deltaX;
-		}
-		else if(character.me.x <= 0){
-			character.me.x = 0;
-		}
+	    if (character.me.y >= 0) {
+	        character.me.y += deltaY;
+	    }
 
-		if(character.me.y >= 0){
-      		character.me.y += deltaY;
-		}
-	
-		if(character.me.y >= 635){
-			character.me.y -= 80;
-		}
-		
-		if (character.me.x >= (sWidth - character.width)) {
-			// can't go right
-			//map.x -= sWidth;
-			character.me.x = sWidth - character.me.width;
-		}
-		if(character.me.y >= sHeight){
-			map.y -= sHeight;
-			character.me.y -= sHeight;
-		}
+	    if (character.me.y >= 635) {
+	        character.me.y -= 80;
+	    }
 
-		if(hasKey == false && characterBounds.intersects(key.getBounds(currentSprite))){
-			// character picks up key
-			key.removeFromParent();
-			currentSprite.addChild(key);
-			key.x = invX;
-			key.y = invY;
-			hasKey = true;	
-		}
+	    if (character.me.x >= (sWidth - character.width)) {
+	        // can't go right
+	        character.me.x = sWidth - character.me.width;
+	    }
+	    if (character.me.y >= sHeight) {
+	        map.y -= sHeight;
+	        character.me.y -= sHeight;
+	    }
 
-		
-	}
+	    if (hasKey == false && characterBounds.intersects(key.getBounds(currentSprite))) {
+	        // character picks up key
+	        key.removeFromParent();
+	        currentSprite.addChild(key);
+	        key.x = invX;
+	        key.y = invY;
+	        hasKey = true;
+	    }
 
 	private function levelCredits() {
-		//Generate the objective text
-		var objectiveHeader:TextField = new TextField(200, 100, "Game Objectives:", "PixelNoir", 50, 0x000000);
-		objectiveHeader.x = getSectorXCenter(2, objectiveHeader.width);
-		objectiveHeader.y = 10;
+	    //Generate the objective text
+	    var objectiveHeader: TextField = new TextField(200, 100, "Game Objectives:", "PixelNoir", 50, 0x000000);
+	    objectiveHeader.x = getSectorXCenter(2, objectiveHeader.width);
+	    objectiveHeader.y = 10;
 
-		var objectiveOne:TextField = new TextField(400, 100, "- Move with W, A, S, D. Use spacebar to jump!", "PixelNoir", 40, 0x000000);
-		objectiveOne.x = getSectorXCenter(2, objectiveOne.width);
-		objectiveOne.y = 90;
+	    var objectiveOne: TextField = new TextField(400, 100, "- Move with W, A, S, D. Use spacebar to jump!", "PixelNoir", 40, 0x000000);
+	    objectiveOne.x = getSectorXCenter(2, objectiveOne.width);
+	    objectiveOne.y = 90;
 
-		var objectiveTwo:TextField = new TextField(500, 100, "- Collect the keys to open the door and to advance to the next level.", "PixelNoir", 40, 0x000000);
-		objectiveTwo.x = getSectorXCenter(2, objectiveTwo.width);
-		objectiveTwo.y =160;
-		var objectiveThree:TextField = new TextField(400, 100, "- Press spacebar on the door in order to open it with the key.", "PixelNoir", 40, 0x000000);
-		objectiveThree.x = getSectorXCenter(2, objectiveThree.width);
-		objectiveThree.y =250;
-		map.addChild(objectiveHeader);
-		map.addChild(objectiveOne);
-		map.addChild(objectiveTwo);
-		map.addChild(objectiveThree);
+	    var objectiveTwo: TextField = new TextField(500, 100, "- Collect the keys to open the door and to advance to the next level.", "PixelNoir", 40, 0x000000);
+	    objectiveTwo.x = getSectorXCenter(2, objectiveTwo.width);
+	    objectiveTwo.y = 160;
+	    var objectiveThree: TextField = new TextField(400, 100, "- Press spacebar on the door in order to open it with the key.", "PixelNoir", 40, 0x000000);
+	    objectiveThree.x = getSectorXCenter(2, objectiveThree.width);
+	    objectiveThree.y = 250;
+	    map.addChild(objectiveHeader);
+	    map.addChild(objectiveOne);
+	    map.addChild(objectiveTwo);
+	    map.addChild(objectiveThree);
 	}
 	
 	private function level0()
@@ -434,32 +413,29 @@ class Game extends Sprite{
 	}
 
 	private function keyDown(event:KeyboardEvent){
-		var keycode = event.keyCode;
+	    var keycode = event.keyCode;
 
-		if(keycode == 32 && !jumpLock){
-			character.addAnimation("jump");
-			jumpSound.play();
-			if(character.me.bounds.intersects(door.getBounds(currentSprite))){
-				if(hasKey){
-					hasKey = false;					
-					key.removeFromParent();
-					nextLevel();
-				}
-			}
-			else{
-				jumpLock = true;	
-				deltaY = -movementCoefficient * 1.5;				
-			}
+	    if (keycode == 32 && !jumpLock) {
+	        character.addAnimation("jump");
+	        jumpSound.play();
+	        if (character.me.bounds.intersects(door.getBounds(currentSprite))) {
+	            if (hasKey) {
+	                hasKey = false;
+	                key.removeFromParent();
+	                nextLevel();
+	            }
+	        } else {
+	            jumpLock = true;
+	            deltaY = -movementCoefficient * 1.5;
+	        }
 
-		}
-		else if(keycode == 65){
-			character.addAnimation("left");
-			deltaX = -movementCoefficient;
-		}
-		else if(keycode == 68){
-			character.addAnimation("right");
-			deltaX = movementCoefficient;
-		}
+	    } else if (keycode == 65) {
+	        character.addAnimation("left");
+	        deltaX = -movementCoefficient;
+	    } else if (keycode == 68) {
+	        character.addAnimation("right");
+	        deltaX = movementCoefficient;
+	    }
 	}
 
 	private function keyUp(event:KeyboardEvent)
@@ -505,17 +481,13 @@ class Game extends Sprite{
 			baby.x = 1320;
 			baby.y = 320;
 			count = 0;
-			//timer = new haxe.Timer(1000);
-			//timer.run = time;
 		}
 		else {
 			// back to beginning of THIS screen
 			key.removeFromParent();
 			resetLevel();
-			// key.x = key0X;
-			// key.y = key0Y;
-			 character.me.x = getSectorOffset((currentLevel+2), true);
-			 character.me.y = initY;
+			character.me.x = getSectorOffset((currentLevel+2), true);
+			character.me.y = initY;
 			characterInfo.lives--;
 			characterInfo.livesText.text = "Lives: " + Std.string(characterInfo.lives);
 		}
@@ -548,20 +520,9 @@ class Game extends Sprite{
 	public function winGame(){
 		var win = new Image(Root.assets.getTexture("win"));
 		currentSprite.addChild(win);
-		// Starling.juggler.tween(win, 1.0, {
-		// 			transition:Transitions.EASE_OUT, delay:1, alpha: 0, onComplete: function() {
-		// 			//timer.stop();
-		// 			win.removeFromParent();
-		// 			resetGame("fail");
-		// 			//start();
-		// 			}
-		// 		});
 	}
 
 	public function time(){
-		
-		//count++;
-		
 		times++;
 		if(times == 60){
 			count++;
