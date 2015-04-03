@@ -17,7 +17,7 @@ class Root extends Sprite {
 	public function start(startup:Startup) {
 		assets = new AssetManager();
 		assets.enqueue("assets/assets.xml", "assets/assets.png");
-		assets.enqueue("assets/Stitch.fnt", "assets/PixelNoir.fnt");
+		assets.enqueue("assets/Stitch.fnt", "assets/PixelNoir.fnt", "assets/jump.mp3");
     	
 		assets.loadQueue(function onProgress(ratio:Float) {
 			if (ratio == 1) {

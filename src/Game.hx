@@ -3,7 +3,7 @@ import starling.events.Event;
 import starling.text.TextField;
 import starling.events.KeyboardEvent;
 import starling.events.EnterFrameEvent;
-
+import flash.media.Sound;
 import starling.animation.Transitions;
 import flash.geom.Rectangle;
 import Math.*;
@@ -17,6 +17,8 @@ class Game extends Sprite{
 
   	public var currentSprite:Sprite;
   	
+	public static var jumpSound:Sound;
+	
   	public var map:GameMap;
 	public var tiles:Tilemap; 
 		
@@ -79,7 +81,7 @@ class Game extends Sprite{
 
 	public function start() {	
 
-		
+		jumpSound = Root.assets.getSound("jump");
 		
 		var tiles = new Tilemap(Root.assets, "map1");
 		currentSprite.addChild(tiles);
@@ -356,7 +358,8 @@ class Game extends Sprite{
 	private function keyDown(event:KeyboardEvent){
 		var keycode = event.keyCode;
 
-		if(keycode == 32 && !jumpLock){
+		if (keycode == 32 && !jumpLock) {
+			jumpSound.play();
 			if(character.bounds.intersects(door.getBounds(currentSprite))){
 				if(hasKey){					
 					key.removeFromParent();
