@@ -64,6 +64,7 @@ class Game extends Sprite{
 	var hasBaby:Bool = false;
 
 	private var count:Int = 0;
+	private var times:Int = 0;
 
 	//create timer
 	var timer = new haxe.Timer(1000);
@@ -107,7 +108,6 @@ class Game extends Sprite{
 		//run timer
 		//count = 0;
 		timer.run = time;
-		timer.run();
 
 		//adding a baby for testing
 		//baby = addBaby(320, 320, "baby1");
@@ -115,6 +115,7 @@ class Game extends Sprite{
 	    Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDown);
 	    Starling.current.stage.addEventListener(KeyboardEvent.KEY_UP, keyUp);
 		currentSprite.addEventListener(EnterFrameEvent.ENTER_FRAME, frameUpdate);
+		addEventListener(EnterFrameEvent.ENTER_FRAME, time); 
 
 	}
 
@@ -132,12 +133,20 @@ class Game extends Sprite{
 	}
 
 	private function frameUpdate(event:EnterFrameEvent) {
+
 		var sWidth = Starling.current.stage.stageWidth;
 		var sHeight = Starling.current.stage.stageHeight;		
 		var characterBounds:Rectangle = character.bounds;		
 		var platformTopCollision:Bool = false;
 		var platformBottomCollision:Bool = false;
 		
+
+		//times++;
+		//if(times == 60){
+		//	count++;
+		//	times = 0;
+		//}
+
 		// Check for collisions with platforms
 		for (platform in levelGen.platforms)
 		{
@@ -425,7 +434,8 @@ class Game extends Sprite{
 			baby.x = 320;
 			baby.y = 320;
 			count = 0;
-			timer.run();
+			timer = new haxe.Timer(1000);
+			timer.run = time;
 		}
 		else {
 			// back to beginning of THIS screen
@@ -484,10 +494,10 @@ class Game extends Sprite{
 	}
 
 	public function time(){
-		//var count:Int = 0;
+		
 		count++;
 		characterInfo.time = count;
 		characterInfo.timeText.text = "Timer: " + Std.string(characterInfo.time);
-		//timer.stamp();
+		
 	}
 }
