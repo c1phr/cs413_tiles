@@ -319,7 +319,7 @@ class Game extends Sprite{
 		key0X = getSectorOffset(2, true) + (sWidth - (key.width * 10 ));
 		key0Y = (sWidth - (64*3));
 		key.x = key0X - 25;
-		key.y = key0Y - 200;
+		key.y = key0Y - 390;
 		key.scaleX += 1;
 		key.scaleY += 1;
 
@@ -333,14 +333,14 @@ class Game extends Sprite{
 	{
 		//add in the door/key
 		door = new Image(Root.assets.getTexture('door'));
-		door.x = getSectorOffset(3, true) + 64;
-		door.y = (sWidth - (32*11));
+		door.x = getSectorOffset(3, true) + 64 + 128;
+		door.y = (sWidth - (32*11)) - 256;
 
 		key = new Image(Root.assets.getTexture('key_red'));
 		key0X = getSectorOffset(3, true) + (sWidth - (key.width * 10 ));
 		key0Y = (sWidth - (64*3));
-		key.x = key0X;
-		key.y = key0Y;
+		key.x = key0X - 25;
+		key.y = key0Y - 255;
 		key.scaleX += 1;
 		key.scaleY += 1;
 
@@ -354,14 +354,14 @@ class Game extends Sprite{
 	{
 		//add in the door/key
 		door = new Image(Root.assets.getTexture('door'));
-		door.x = getSectorOffset(3, true) + 64;
-		door.y = (sWidth - (32*11));
+		door.x = getSectorOffset(3, true) + 64 + 128;
+		door.y = (sWidth - (32*11)) - 256;
 
 		key = new Image(Root.assets.getTexture('key_red'));
 		key0X = getSectorOffset(3, true) + (sWidth - (key.width * 10 ));
 		key0Y = (sWidth - (64*3));
-		key.x = key0X;
-		key.y = key0Y;
+		key.x = key0X - 25;
+		key.y = key0Y - 255;
 		key.scaleX += 1;
 		key.scaleY += 1;
 
