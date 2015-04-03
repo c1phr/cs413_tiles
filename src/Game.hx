@@ -107,7 +107,7 @@ class Game extends Sprite{
 
 		//run timer
 		//count = 0;
-		timer.run = time;
+		//timer.run = time;
 
 		//adding a baby for testing
 		//baby = addBaby(320, 320, "baby1");
@@ -115,7 +115,7 @@ class Game extends Sprite{
 	    Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDown);
 	    Starling.current.stage.addEventListener(KeyboardEvent.KEY_UP, keyUp);
 		currentSprite.addEventListener(EnterFrameEvent.ENTER_FRAME, frameUpdate);
-		addEventListener(EnterFrameEvent.ENTER_FRAME, time); 
+		Starling.current.stage.addEventListener(EnterFrameEvent.ENTER_FRAME, time); 
 
 	}
 
@@ -141,11 +141,7 @@ class Game extends Sprite{
 		var platformBottomCollision:Bool = false;
 		
 
-		//times++;
-		//if(times == 60){
-		//	count++;
-		//	times = 0;
-		//}
+		
 
 		// Check for collisions with platforms
 		for (platform in levelGen.platforms)
@@ -434,8 +430,8 @@ class Game extends Sprite{
 			baby.x = 320;
 			baby.y = 320;
 			count = 0;
-			timer = new haxe.Timer(1000);
-			timer.run = time;
+			//timer = new haxe.Timer(1000);
+			//timer.run = time;
 		}
 		else {
 			// back to beginning of THIS screen
@@ -456,7 +452,7 @@ class Game extends Sprite{
 	
 	public function initializeChar() {
 		// initialize lives
-		characterInfo = { lives : 3, time : 0, livesText : new TextField(100, 50, "Lives: " + 3, "PixelNoir", 40), timeText : new TextField(100, 50, "Time: " + 0, "PixelNoir", 40) };
+		characterInfo = { lives : 3, time : 0, livesText : new TextField(100, 50, "Lives: " + 3, "PixelNoir", 40), timeText : new TextField(110, 50, "Time: " + 0, "PixelNoir", 40) };
 		characterInfo.livesText.x = sWidth - characterInfo.livesText.width;
 		characterInfo.timeText.x = sWidth - (characterInfo.timeText.width*2);
 		currentSprite.addChild(characterInfo.livesText);
@@ -495,9 +491,14 @@ class Game extends Sprite{
 
 	public function time(){
 		
-		count++;
-		characterInfo.time = count;
-		characterInfo.timeText.text = "Timer: " + Std.string(characterInfo.time);
+		//count++;
 		
+		times++;
+		if(times == 60){
+			count++;
+			characterInfo.time = count;
+			characterInfo.timeText.text = "Timer: " + Std.string(characterInfo.time);
+			times = 0;
+		}
 	}
 }
