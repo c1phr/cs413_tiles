@@ -11,7 +11,7 @@ import starling.core.Starling;
 
 import haxe.Timer;
 
-typedef CharacterInformation = { lives : Int, text : TextField }
+typedef CharacterInformation = { lives : Int, time : Int, livesText : TextField, timeText : TextField }
 
 class Game extends Sprite{
 
@@ -147,8 +147,7 @@ class Game extends Sprite{
 			if(characterBounds.intersects(babyBounds)){
 				currentSprite.removeChild(baby);
 				timer.stop();
-				winGame();
-				
+				winGame();	
 			}
 			// Get the platform bounds in the coordinate-space of the currentSprite
 			var platformRect = platform.texture.getBounds(currentSprite);
@@ -420,18 +419,20 @@ class Game extends Sprite{
 			character.x = initX;
 			character.y = initY;
 			characterInfo.lives = 3;
-			characterInfo.text.text = "Lives: " + Std.string(characterInfo.lives);
+			characterInfo.livesText.text = "Lives: " + Std.string(characterInfo.lives);
+			characterInfo.timeText.text = "Time: " + 0;
 			currentSprite.addChild(baby);
 			baby.x = 320;
 			baby.y = 320;
-			//timer.run();
+			count = 0;
+			timer.run();
 		}
 		else {
 			// back to beginning of THIS screen
 			character.x = getSectorOffset(currentLevel, true);
 			character.y = initY;
 			characterInfo.lives--;
-			characterInfo.text.text = "Lives: " + Std.string(characterInfo.lives);
+			characterInfo.livesText.text = "Lives: " + Std.string(characterInfo.lives);
 		}
 		
 		
@@ -445,9 +446,11 @@ class Game extends Sprite{
 	
 	public function initializeChar() {
 		// initialize lives
-		characterInfo = { lives : 3, text : new TextField(100, 50, "Lives: " + 3, "PixelNoir", 40) };
-		characterInfo.text.x = sWidth - characterInfo.text.width;
-		currentSprite.addChild(characterInfo.text);
+		characterInfo = { lives : 3, time : 0, livesText : new TextField(100, 50, "Lives: " + 3, "PixelNoir", 40), timeText : new TextField(100, 50, "Time: " + 0, "PixelNoir", 40) };
+		characterInfo.livesText.x = sWidth - characterInfo.livesText.width;
+		characterInfo.timeText.x = sWidth - (characterInfo.timeText.width*2);
+		currentSprite.addChild(characterInfo.livesText);
+		currentSprite.addChild(characterInfo.timeText);
 
 		// initialize sprite
 	    character = new Image(Root.assets.getTexture('lizard'));
@@ -473,8 +476,8 @@ class Game extends Sprite{
 		Starling.juggler.tween(win, 1.0, {
 					transition:Transitions.EASE_OUT, delay:1, alpha: 0, onComplete: function() {
 					//timer.stop();
-					resetGame("fail");
 					win.removeFromParent();
+					resetGame("fail");
 					//start();
 					}
 				});
@@ -482,8 +485,9 @@ class Game extends Sprite{
 
 	public function time(){
 		//var count:Int = 0;
-		trace(count);
 		count++;
+		characterInfo.time = count;
+		characterInfo.timeText.text = "Timer: " + Std.string(characterInfo.time);
 		//timer.stamp();
 	}
 }
