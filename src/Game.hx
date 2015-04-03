@@ -368,8 +368,8 @@ class Game extends Sprite{
 		map.addChild(door);
 		map.addChild(key);
 
-		baby.x = 320;
-		baby.y = 320;
+		baby.x = 275;
+		baby.y = 392;
 
 		levelGen.generate(Levels.Level3, currentSprite);	
 	}
