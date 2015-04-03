@@ -510,11 +510,12 @@ class Game extends Sprite{
 		}
 		else {
 			// back to beginning of THIS screen
-			//resetLevel();
-			key.x = key0X;
-			key.y = key0Y;
-			character.me.x = getSectorOffset((currentLevel+2), true);
-			character.me.y = initY;
+			key.removeFromParent();
+			resetLevel();
+			// key.x = key0X;
+			// key.y = key0Y;
+			 character.me.x = getSectorOffset((currentLevel+2), true);
+			 character.me.y = initY;
 			characterInfo.lives--;
 			characterInfo.livesText.text = "Lives: " + Std.string(characterInfo.lives);
 		}
