@@ -446,7 +446,7 @@ class Game extends Sprite{
 	
 	public function initializeChar() {
 		// initialize lives
-		characterInfo = { lives : 3, time : 0, livesText : new TextField(100, 50, "Lives: " + 3, "PixelNoir", 40), timeText : new TextField(100, 50, "Time: " + 0, "PixelNoir", 40) };
+		characterInfo = { lives : 3, time : 0, livesText : new TextField(100, 50, "Lives: " + 3, "PixelNoir", 40), timeText : new TextField(110, 50, "Time: " + 0, "PixelNoir", 40) };
 		characterInfo.livesText.x = sWidth - characterInfo.livesText.width;
 		characterInfo.timeText.x = sWidth - (characterInfo.timeText.width*2);
 		currentSprite.addChild(characterInfo.livesText);
