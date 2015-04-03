@@ -3,9 +3,12 @@ import starling.events.Event;
 import starling.text.TextField;
 import starling.events.KeyboardEvent;
 import starling.events.EnterFrameEvent;
-import starling.animation.*;
+
+import starling.animation.Transitions;
 import flash.geom.Rectangle;
+import Math.*;
 import starling.core.Starling;
+
 import haxe.Timer;
 
 typedef CharacterInformation = { lives : Int, time : Int, livesText : TextField, timeText : TextField }
@@ -13,7 +16,7 @@ typedef CharacterInformation = { lives : Int, time : Int, livesText : TextField,
 class Game extends Sprite{
 
   	public var currentSprite:Sprite;
-	
+  	
   	public var map:GameMap;
 	public var tiles:Tilemap; 
 		
@@ -28,7 +31,7 @@ class Game extends Sprite{
   	private var baby:Image;
 	
   	//initial variables for character
-	public var character:Character;
+	public var character:Image;
 	// first starting point
 	var initX:Float = 30;
 	var initY:Float = 540;
@@ -40,7 +43,6 @@ class Game extends Sprite{
   	var deltaY:Float = 0;
 	private var characterInfo : CharacterInformation;
 	private var hasKey:Bool;
-	
 	// static inline effectively marks these as "constants"
   	public static inline var gravityCoefficient:Int = 6;
   	public static inline var movementCoefficient:Float = 10;
@@ -58,6 +60,8 @@ class Game extends Sprite{
 	
   	var levelTransition:Bool = false;
 	var groundFloor:Ground;
+
+	var hasBaby:Bool = false;
 
 	private var count:Int = 0;
 	private var times:Int = 0;
@@ -77,6 +81,8 @@ class Game extends Sprite{
 	}
 
 	public function start() {	
+
+		
 		
 		var tiles = new Tilemap(Root.assets, "map1");
 		currentSprite.addChild(tiles);
@@ -96,12 +102,15 @@ class Game extends Sprite{
 		levelCredits();
 		level0();
 		
-		// create inventory
+		// create inv
 		initializeInv();
 
 		//run timer
 		//count = 0;
 		timer.run = time;
+
+		//adding a baby for testing
+		//baby = addBaby(320, 320, "baby1");
 
 	    Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDown);
 	    Starling.current.stage.addEventListener(KeyboardEvent.KEY_UP, keyUp);
@@ -127,7 +136,7 @@ class Game extends Sprite{
 
 		var sWidth = Starling.current.stage.stageWidth;
 		var sHeight = Starling.current.stage.stageHeight;		
-		var characterBounds:Rectangle = character.me.bounds;		
+		var characterBounds:Rectangle = character.bounds;		
 		var platformTopCollision:Bool = false;
 		var platformBottomCollision:Bool = false;
 		
@@ -141,8 +150,9 @@ class Game extends Sprite{
 		// Check for collisions with platforms
 		for (platform in levelGen.platforms)
 		{
-			// check babybounds to see if the player has won
+
 			var babyBounds:Rectangle = baby.bounds;
+			//babyBounds.getBounds(currentSprite);
 			if(characterBounds.intersects(babyBounds)){
 				currentSprite.removeChild(baby);
 				timer.stop();
@@ -152,7 +162,7 @@ class Game extends Sprite{
 			var platformRect = platform.texture.getBounds(currentSprite);
 			if (characterBounds.intersects(platformRect) && !levelTransition)
 			{									
-				if (character.me.y <= platformRect.top)
+				if (character.y <= platformRect.top)
 				{									
 					platformTopCollision = true; // Character collided with the top of a platform
 					if (platform.hasSpikes)
@@ -160,7 +170,7 @@ class Game extends Sprite{
 						loseLife(); // character has collided with spikes
 					}
 				}
-				if (character.me.y + character.me.height >= platformRect.bottom)
+				if (character.y + character.height >= platformRect.bottom)
 				{									
 					platformBottomCollision = true; // Character collided with the bottom of a platform
 				}				
@@ -176,7 +186,7 @@ class Game extends Sprite{
 			}				
 			else if (!platformTopCollision) // Falling down
 			{	
-				character.me.y += gravityCoefficient;					
+				character.y += gravityCoefficient;					
 			}
 
 			else if (platformTopCollision) // We landed on a platform
@@ -187,7 +197,7 @@ class Game extends Sprite{
 			if (platformBottomCollision) // We hit our head on the bottom of a platform
 			{				
 				deltaY = 0;
-				character.me.y += gravityCoefficient;
+				character.y += gravityCoefficient;
 			}
 		}	
 
@@ -195,31 +205,31 @@ class Game extends Sprite{
 		{			
 			jumpLock = false;			
 		}		
-		if(character.me.x >= 0 && character.me.x <= (sWidth - character.me.width)){
-      		character.me.x += deltaX;
+		if(character.x >= 0 && character.x <= (sWidth - character.width)){
+      		character.x += deltaX;
 		}
-		else if(character.me.x <= 0){
-			character.me.x = 0;
+		else if(character.x <= 0){
+			character.x = 0;
 		}
 
-		if(character.me.y >= 0){
-      		character.me.y += deltaY;
+		if(character.y >= 0){
+      		character.y += deltaY;
 		}	
-		if(character.me.y >= 635){
-			character.me.y -= 80;
+		if(character.y >= 635){
+			character.y -= 80;
 		}
 
-		if(character.me.x >= (sWidth-character.me.width)){
+		if(character.x >= (sWidth-character.width)){
 			map.x -= sWidth;
-			character.me.x = 0;			
+			character.x = 0;			
 		}
-		if(character.me.y >= sHeight){
+		if(character.y >= sHeight){
 			map.y -= sHeight;
-			character.me.y -= sHeight;
+			character.y -= sHeight;
 		}
-		else if(character.me.y < 0){
+		else if(character.y < 0){
 			map.y += sHeight;
-			character.me.y += sHeight;			
+			character.y += sHeight;			
 		}
 
 		if(hasKey == false && characterBounds.intersects(key.getBounds(currentSprite))){
@@ -307,8 +317,8 @@ class Game extends Sprite{
 		currentLevel++;
 		levelGen.destroy();
 		//Set the character forward one level.
-		character.me.x = getSectorOffset((level+1), true);
-		character.me.y = initY;
+		character.x = getSectorOffset((level+1), true);
+		character.y = initY;
 		switch(level){
 			case 1:
 				levelGen.generate(Levels.Level1, currentSprite);				
@@ -360,9 +370,8 @@ class Game extends Sprite{
 	private function keyDown(event:KeyboardEvent){
 		var keycode = event.keyCode;
 
-		if (keycode == 32 && !jumpLock) {
-			character.addAnimation("jump");
-			if(character.me.bounds.intersects(door.getBounds(currentSprite))){
+		if(keycode == 32 && !jumpLock){
+			if(character.bounds.intersects(door.getBounds(currentSprite))){
 				if(hasKey){					
 					key.removeFromParent();
 					nextLevel(++thisLevel);
@@ -374,12 +383,10 @@ class Game extends Sprite{
 			}
 
 		}
-		else if (keycode == 65) {
-			character.addAnimation("left");
+		else if(keycode == 65){
 			deltaX = -movementCoefficient;
 		}
-		else if (keycode == 68) {
-			character.addAnimation("right");
+		else if(keycode == 68){
 			deltaX = movementCoefficient;
 		}
 	}
@@ -387,12 +394,9 @@ class Game extends Sprite{
 	private function keyUp(event:KeyboardEvent)
 	{
 		var keycode = event.keyCode;
-		if (keycode == 65 || keycode == 68) {
+		if(keycode == 65 || keycode == 68){
 			deltaX = 0;
 		}		
-		if (keycode == 32){
-			character.removeAnimation();
-		}
 	}
 	
 	public function loseLife() {
@@ -421,8 +425,8 @@ class Game extends Sprite{
 		hasKey = false;
 		if (reason == "fail") {
 			// go back to main screen
-			character.me.x = initX;
-			character.me.y = initY;
+			character.x = initX;
+			character.y = initY;
 			characterInfo.lives = 3;
 			characterInfo.livesText.text = "Lives: " + Std.string(characterInfo.lives);
 			characterInfo.timeText.text = "Time: " + 0;
@@ -435,23 +439,35 @@ class Game extends Sprite{
 		}
 		else {
 			// back to beginning of THIS screen
-			character.me.x = getSectorOffset(currentLevel, true);
-			character.me.y = initY;
+			character.x = getSectorOffset(currentLevel, true);
+			character.y = initY;
 			characterInfo.lives--;
 			characterInfo.livesText.text = "Lives: " + Std.string(characterInfo.lives);
 		}
+		
+		
+	}
+	
+	public function addBaby(xPos: Int, yPos: Int, texture: String) {
+		// for adding the baby. Need the x and y coordinates and a texture name
+		var b = new Baby(xPos, yPos, texture);
+		currentSprite.addChild(b);
 	}
 	
 	public function initializeChar() {
 		// initialize lives
-		characterInfo = { lives : 3, time : 0, livesText : new TextField(100, 50, "Lives: " + 3, "PixelNoir", 40), timeText : new TextField(110, 50, "Time: " + 0, "PixelNoir", 40) };
+		characterInfo = { lives : 3, time : 0, livesText : new TextField(100, 50, "Lives: " + 3, "PixelNoir", 40), timeText : new TextField(100, 50, "Time: " + 0, "PixelNoir", 40) };
 		characterInfo.livesText.x = sWidth - characterInfo.livesText.width;
 		characterInfo.timeText.x = sWidth - (characterInfo.timeText.width*2);
 		currentSprite.addChild(characterInfo.livesText);
 		currentSprite.addChild(characterInfo.timeText);
 
 		// initialize sprite
-		character = new Character(this, initX, initY);
+	    character = new Image(Root.assets.getTexture('lizard'));
+		character.smoothing = "none";
+	    character.x = initX;
+	    character.y = initY;
+	    currentSprite.addChild(character);
 	}
 	
 	public function initializeInv() {
@@ -484,7 +500,4 @@ class Game extends Sprite{
 		characterInfo.timeText.text = "Timer: " + Std.string(characterInfo.time);
 		
 	}
-	
-		
-	
 }
