@@ -274,16 +274,16 @@ class Game extends Sprite{
 		key.scaleY += 1;
 
 		//Generate the next level arrow
-		this.objectArrow = new Image(Root.assets.getTexture('white-arrow'));
-		this.objectArrow.x = getSectorOffset(1, true) + (sWidth - this.objectArrow.width);
-		this.objectArrow.y = getSectorYCenter(0, this.objectArrow.height - 100);
+		//this.objectArrow = new Image(Root.assets.getTexture('white-arrow'));
+		//this.objectArrow.x = getSectorOffset(1, true) + (sWidth - this.objectArrow.width);
+		//this.objectArrow.y = getSectorYCenter(0, this.objectArrow.height - 100);
 
-		var objectArrowText:TextField = new TextField(150, 64, "instructions", "PixelNoir", 30, 0x000000);
-		objectArrowText.x = getSectorOffset(1, true) + (sWidth - objectArrowText.width);
-		objectArrowText.y = getSectorYCenter(0, objectArrowText.height - 100);
+		//var objectArrowText:TextField = new TextField(150, 64, "instructions", "PixelNoir", 30, 0x000000);
+		//objectArrowText.x = getSectorOffset(1, true) + (sWidth - objectArrowText.width);
+		//objectArrowText.y = getSectorYCenter(0, objectArrowText.height - 100);
 
-		map.addChild(objectArrow);
-		map.addChild(objectArrowText);
+		//map.addChild(objectArrow);
+		//map.addChild(objectArrowText);
 		map.addChild(door);
 		map.addChild(key);
 
