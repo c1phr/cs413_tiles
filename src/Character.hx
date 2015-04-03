@@ -44,7 +44,11 @@ class Character extends Sprite {
 		if (dir == "jump") {
 			temp.x = me.x;
 			temp.y = me.y;
-			addChild(
+			me.removeFromParent();
+			me = jumpRight;
+			me.x = temp.x;
+			me.y = temp.y;
+			game.currentSprite.addChild(me);
 			
 		}
 	}

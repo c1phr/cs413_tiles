@@ -163,7 +163,6 @@ class Game extends Sprite{
 		{
 			if (deltaY < 0 && !platformBottomCollision) // Jumping up
 			{
-				character.addAnimation("jump");
 				deltaY += 1;					
 			}				
 			else if (!platformTopCollision) // Falling down
@@ -352,7 +351,8 @@ class Game extends Sprite{
 	private function keyDown(event:KeyboardEvent){
 		var keycode = event.keyCode;
 
-		if(keycode == 32 && !jumpLock){
+		if (keycode == 32 && !jumpLock) {
+			character.addAnimation("jump");
 			if(character.me.bounds.intersects(door.getBounds(currentSprite))){
 				if(hasKey){					
 					key.removeFromParent();
