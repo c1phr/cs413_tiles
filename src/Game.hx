@@ -41,6 +41,8 @@ class Game extends Sprite{
   	var charYPos:Int = 0;  	
 	var deltaX:Float = 0;
   	var deltaY:Float = 0;
+
+  	var title: TextField ;
 	private var characterInfo : CharacterInformation;
 	private var hasKey:Bool;
 
@@ -276,7 +278,7 @@ class Game extends Sprite{
 		levelGen.generate(Levels.Level0, currentSprite);
 		
 		// title
-		var title: TextField = new TextField(400, 120, "Find Carlos", "Stitch", 120, 0x000000);
+		title = new TextField(400, 120, "Find Carlos", "Stitch", 120, 0x000000);
 		title.x = getSectorXCenter(1, title.width);
 		title.y = 50;
 		map.addChild(title);
@@ -290,16 +292,18 @@ class Game extends Sprite{
 	private function level1()
 	{
 		character.me.x = 0;
+		door.removeFromParent();	
+		title.removeFromParent();
 		//add in the door/key
 		door = new Image(Root.assets.getTexture('door'));
-		door.x = getSectorOffset(2, true) + 64;
+		door.x = getSectorOffset(1, true) + 64;
 		door.y = (sWidth - (32*11));
 
 		key = new Image(Root.assets.getTexture('key_red'));
-		key0X = getSectorOffset(2, true) + (sWidth - (key.width * 10 ));
-		key0Y = (sWidth - (64*3));
+		key0X = getSectorOffset(1, true) + (sWidth - (key.width * 10 ));
+		key0Y = (sWidth - (64*3))- 390;
 		key.x = key0X - 25;
-		key.y = key0Y - 390;
+		key.y = key0Y ;
 		key.scaleX += 1;
 		key.scaleY += 1;
 
@@ -313,20 +317,24 @@ class Game extends Sprite{
 	{
 		character.me.x = 0;
 		//add in the door/key
+		door.removeFromParent();
 		door = new Image(Root.assets.getTexture('door'));
-		door.x = getSectorOffset(3, true) + 64 + 128;
-		door.y = (sWidth - (32*11)) - 256;
-
+		//door.x = getSectorOffset(3, true);
+		//door.y = (sWidth - (32*11));
+		door.x = 192;
+		door.y = 32;
 		key = new Image(Root.assets.getTexture('key_red'));
-		key0X = getSectorOffset(3, true) + (sWidth - (key.width * 10 ));
+		key0X = getSectorOffset(2, true) + (sWidth - (key.width * 10 ));
 		key0Y = (sWidth - (64*3));
-		key.x = key0X - 25;
-		key.y = key0Y - 255;
+		key.x = 545;
+		key.y = 190;
 		key.scaleX += 1;
 		key.scaleY += 1;
 
-		map.addChild(door);
-		map.addChild(key);
+		currentSprite.addChild(door);
+		currentSprite.addChild(key);
+		character.me.removeFromParent();
+		currentSprite.addChild(character.me);
 
 		levelGen.generate(Levels.Level2, currentSprite);	
 	}
@@ -334,6 +342,7 @@ class Game extends Sprite{
 	private function level3()
 	{
 		character.me.x = 0;
+		door.removeFromParent();
 		//add in the door/key
 		door = new Image(Root.assets.getTexture('door'));
 		door.x = getSectorOffset(3, true) + 64 + 128;
@@ -502,6 +511,8 @@ class Game extends Sprite{
 		else {
 			// back to beginning of THIS screen
 			//resetLevel();
+			key.x = key0X;
+			key.y = key0Y;
 			character.me.x = getSectorOffset((currentLevel+2), true);
 			character.me.y = initY;
 			characterInfo.lives--;
@@ -536,14 +547,14 @@ class Game extends Sprite{
 	public function winGame(){
 		var win = new Image(Root.assets.getTexture("win"));
 		currentSprite.addChild(win);
-		Starling.juggler.tween(win, 1.0, {
-					transition:Transitions.EASE_OUT, delay:1, alpha: 0, onComplete: function() {
-					//timer.stop();
-					win.removeFromParent();
-					resetGame("fail");
-					//start();
-					}
-				});
+		// Starling.juggler.tween(win, 1.0, {
+		// 			transition:Transitions.EASE_OUT, delay:1, alpha: 0, onComplete: function() {
+		// 			//timer.stop();
+		// 			win.removeFromParent();
+		// 			resetGame("fail");
+		// 			//start();
+		// 			}
+		// 		});
 	}
 
 	public function time(){
