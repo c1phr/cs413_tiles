@@ -61,8 +61,6 @@ class Game extends Sprite{
   	var levelTransition:Bool = false;
 	var groundFloor:Ground;
 
-	var hasBaby:Bool = false;
-
 	private var count:Int = 0;
 
 	//create timer
@@ -108,9 +106,6 @@ class Game extends Sprite{
 		//count = 0;
 		timer.run = time;
 		timer.run();
-
-		//adding a baby for testing
-		//baby = addBaby(320, 320, "baby1");
 
 	    Starling.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDown);
 	    Starling.current.stage.addEventListener(KeyboardEvent.KEY_UP, keyUp);
@@ -436,12 +431,6 @@ class Game extends Sprite{
 		}
 		
 		
-	}
-	
-	public function addBaby(xPos: Int, yPos: Int, texture: String) {
-		// for adding the baby. Need the x and y coordinates and a texture name
-		var b = new Baby(xPos, yPos, texture);
-		currentSprite.addChild(b);
 	}
 	
 	public function initializeChar() {
