@@ -16,18 +16,9 @@ class Root extends Sprite {
 	
 	public function start(startup:Startup) {
 		assets = new AssetManager();
-		assets.enqueue("assets/PixelNoir.fnt", "assets/PixelNoir.png");
-		assets.enqueue("assets/Stitch.fnt", "assets/Stitch.png");
-    	assets.enqueue("assets/lizard.png", "assets/baby1.png");
-		assets.enqueue("assets/grass.png");
-		assets.enqueue("assets/white-arrow.png", "assets/gameover.png");
-		assets.enqueue("assets/platform1.png", "assets/platform2.png", "assets/platform3.png", "assets/platform4.png");
-		assets.enqueue("assets/spikes.png");
-		assets.enqueue("assets/door.png");
-		assets.enqueue("assets/key_red.gif");
-		assets.enqueue("assets/blanksky.png", "assets/treemiddle.png", "assets/treemiddle2.png", "assets/treemiddle3.png");
-		assets.enqueue("assets/win.png");
-
+		assets.enqueue("assets/assets.xml", "assets/assets.png");
+		assets.enqueue("assets/Stitch.fnt", "assets/PixelNoir.fnt");
+    	
 		assets.loadQueue(function onProgress(ratio:Float) {
 			if (ratio == 1) {
 				// fade the loading screen, start game
