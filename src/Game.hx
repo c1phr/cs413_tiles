@@ -135,9 +135,7 @@ class Game extends Sprite{
 		var characterBounds:Rectangle = character.me.bounds;		
 		var platformTopCollision:Bool = false;
 		var platformBottomCollision:Bool = false;
-		
-		trace(character.me.x);
-		
+			
 
 		// Check for collisions with platforms
 		for (platform in levelGen.platforms)
@@ -205,7 +203,8 @@ class Game extends Sprite{
 
 		if(character.me.y >= 0){
       		character.me.y += deltaY;
-		}	
+		}
+	
 		if(character.me.y >= 635){
 			character.me.y -= 80;
 		}
@@ -218,10 +217,6 @@ class Game extends Sprite{
 		if(character.me.y >= sHeight){
 			map.y -= sHeight;
 			character.me.y -= sHeight;
-		}
-		else if(character.me.y < 0){
-			map.y += sHeight;
-			character.me.y += sHeight;			
 		}
 
 		if(hasKey == false && characterBounds.intersects(key.getBounds(currentSprite))){
@@ -273,18 +268,6 @@ class Game extends Sprite{
 		key.y = key0Y;
 		key.scaleX += 1;
 		key.scaleY += 1;
-
-		//Generate the next level arrow
-		//this.objectArrow = new Image(Root.assets.getTexture('white-arrow'));
-		//this.objectArrow.x = getSectorOffset(1, true) + (sWidth - this.objectArrow.width);
-		//this.objectArrow.y = getSectorYCenter(0, this.objectArrow.height - 100);
-
-		//var objectArrowText:TextField = new TextField(150, 64, "instructions", "PixelNoir", 30, 0x000000);
-		//objectArrowText.x = getSectorOffset(1, true) + (sWidth - objectArrowText.width);
-		//objectArrowText.y = getSectorYCenter(0, objectArrowText.height - 100);
-
-		//map.addChild(objectArrow);
-		//map.addChild(objectArrowText);
 		map.addChild(door);
 		map.addChild(key);
 
