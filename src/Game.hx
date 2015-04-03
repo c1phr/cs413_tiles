@@ -1,14 +1,12 @@
+import flash.system.ImageDecodingPolicy;
 import starling.display.*;
 import starling.events.Event;
 import starling.text.TextField;
 import starling.events.KeyboardEvent;
 import starling.events.EnterFrameEvent;
-
-import starling.animation.Transitions;
+import starling.animation.*;
 import flash.geom.Rectangle;
-import Math.*;
 import starling.core.Starling;
-
 import haxe.Timer;
 
 typedef CharacterInformation = { lives : Int, time : Int, livesText : TextField, timeText : TextField }
@@ -16,7 +14,7 @@ typedef CharacterInformation = { lives : Int, time : Int, livesText : TextField,
 class Game extends Sprite{
 
   	public var currentSprite:Sprite;
-  	
+	
   	public var map:GameMap;
 	public var tiles:Tilemap; 
 		
@@ -43,6 +41,15 @@ class Game extends Sprite{
   	var deltaY:Float = 0;
 	private var characterInfo : CharacterInformation;
 	private var hasKey:Bool;
+	// character animation
+	private var animateLeft:MovieClip;
+	private var animateRight:MovieClip;
+	private var jumpLeft:Image;
+	private var jumpRight:Image;
+	private var playerLeft: Image;
+	private var playerRight: Image;
+	private var dead: Image;
+	
 	// static inline effectively marks these as "constants"
   	public static inline var gravityCoefficient:Int = 6;
   	public static inline var movementCoefficient:Float = 10;
@@ -78,8 +85,8 @@ class Game extends Sprite{
 	}
 
 	public function start() {	
-
 		
+		aniInit();
 		
 		var tiles = new Tilemap(Root.assets, "map1");
 		currentSprite.addChild(tiles);
@@ -136,9 +143,8 @@ class Game extends Sprite{
 		// Check for collisions with platforms
 		for (platform in levelGen.platforms)
 		{
-
+			// check babybounds to see if the player has won
 			var babyBounds:Rectangle = baby.bounds;
-			//babyBounds.getBounds(currentSprite);
 			if(characterBounds.intersects(babyBounds)){
 				currentSprite.removeChild(baby);
 				timer.stop();
@@ -168,10 +174,12 @@ class Game extends Sprite{
 		{
 			if (deltaY < 0 && !platformBottomCollision) // Jumping up
 			{
+				addChild(jumpLeft);
 				deltaY += 1;					
 			}				
 			else if (!platformTopCollision) // Falling down
 			{	
+				addChild(jumpLeft);
 				character.y += gravityCoefficient;					
 			}
 
@@ -429,8 +437,6 @@ class Game extends Sprite{
 			characterInfo.lives--;
 			characterInfo.livesText.text = "Lives: " + Std.string(characterInfo.lives);
 		}
-		
-		
 	}
 	
 	public function initializeChar() {
@@ -478,5 +484,27 @@ class Game extends Sprite{
 		characterInfo.time = count;
 		characterInfo.timeText.text = "Timer: " + Std.string(characterInfo.time);
 		//timer.stamp();
+	}
+	
+	public function aniInit(){
+		// initialize animations
+		var frameRate = 4;
+		animateLeft = new MovieClip(Root.assets.getTextures("lizardani"), frameRate);
+		animateRight = new MovieClip(Root.assets.getTextures("lizard_left_"), frameRate);
+		playerRight = new Image(Root.assets.getTexture("lizard"));
+		playerLeft = new Image(Root.assets.getTexture("lizard_left_1"));
+		jumpRight = new Image(Root.assets.getTexture("lizard_jump_right"));
+		jumpLeft = new Image(Root.assets.getTexture("lizard_jump_left"));
+		playerLeft.smoothing = "none";
+		playerRight.smoothing = "none";
+		jumpLeft.smoothing = "none";
+		jumpRight.smoothing = "none";
+	}
+		
+	private function removeStatic()
+	{
+		// for animation
+		removeChild(playerLeft);
+		removeChild(playerRight);
 	}
 }

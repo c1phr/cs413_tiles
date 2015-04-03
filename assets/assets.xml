@@ -16,12 +16,12 @@
     <SubTexture name="lizardani2" x="1290" y="746" width="49" height="22"/>
     <SubTexture name="lizardani3" x="1290" y="718" width="49" height="22"/>
     <SubTexture name="lizardani4" x="1290" y="774" width="49" height="22"/>
-    <SubTexture name="lizardani5" x="1290" y="802" width="49" height="22"/>
-    <SubTexture name="lizardani_left_1" x="1290" y="830" width="49" height="22"/>
-    <SubTexture name="lizardani_left_2" x="1290" y="858" width="49" height="22"/>
-    <SubTexture name="lizardani_left_3" x="1290" y="830" width="49" height="22"/>
-    <SubTexture name="lizardani_left_4" x="1290" y="886" width="49" height="22"/>
-    <SubTexture name="lizardani_left_5" x="1290" y="914" width="49" height="22"/>
+    <SubTexture name="lizard_jump_right" x="1290" y="802" width="49" height="22"/>
+    <SubTexture name="lizard_left_1" x="1290" y="830" width="49" height="22"/>
+    <SubTexture name="lizard_left_2" x="1290" y="858" width="49" height="22"/>
+    <SubTexture name="lizard_left_3" x="1290" y="830" width="49" height="22"/>
+    <SubTexture name="lizard_left_4" x="1290" y="886" width="49" height="22"/>
+    <SubTexture name="lizard_jump_left" x="1290" y="914" width="49" height="22"/>
     <SubTexture name="loading" x="4" y="4" width="1280" height="1280"/>
     <SubTexture name="platform1" x="1290" y="488" width="64" height="32"/>
     <SubTexture name="platform2" x="1290" y="526" width="64" height="32"/>
