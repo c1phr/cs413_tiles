@@ -45,6 +45,13 @@ class Character extends Sprite {
 			me.texture = jumpRight.texture;
 			trace(me.texture);
 		}
+		if (dir == "left") {
+			me.texture = Root.assets.getTexture("lizard_left_1");
+			trace(me.texture);
+		}
+		if (dir == "right") {
+			me.texture = playerRight.texture;
+		}
 	}
 	
 	public function removeAnimation() {

@@ -365,10 +365,12 @@ class Game extends Sprite{
 			}
 
 		}
-		else if(keycode == 65){
+		else if (keycode == 65) {
+			character.addAnimation("left");
 			deltaX = -movementCoefficient;
 		}
-		else if(keycode == 68){
+		else if (keycode == 68) {
+			character.addAnimation("right");
 			deltaX = movementCoefficient;
 		}
 	}
