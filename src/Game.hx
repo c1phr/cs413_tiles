@@ -273,7 +273,7 @@ class Game extends Sprite{
 		key = new Image(Root.assets.getTexture('key_red'));
 		key0X = getSectorOffset(1, true) + (sWidth - (key.width * 10 ));
 		key0Y = (sWidth - (64*3));
-		key.x = key0X;
+		key.x = key0X - 85;
 		key.y = key0Y;
 		key.scaleX += 1;
 		key.scaleY += 1;
@@ -299,7 +299,7 @@ class Game extends Sprite{
 		// title
 		var title: TextField = new TextField(400, 120, "Find Carlos", "Stitch", 120, 0x000000);
 		title.x = getSectorXCenter(1, title.width);
-		title.y = 10;
+		title.y = 50;
 		map.addChild(title);
 
 		baby = new Image(Root.assets.getTexture("baby1"));
@@ -318,8 +318,8 @@ class Game extends Sprite{
 		key = new Image(Root.assets.getTexture('key_red'));
 		key0X = getSectorOffset(2, true) + (sWidth - (key.width * 10 ));
 		key0Y = (sWidth - (64*3));
-		key.x = key0X;
-		key.y = key0Y;
+		key.x = key0X - 25;
+		key.y = key0Y - 200;
 		key.scaleX += 1;
 		key.scaleY += 1;
 
@@ -482,9 +482,9 @@ class Game extends Sprite{
 	
 	public function resetGame(reason: String) {
 		// pass "fail" for game over, "death" otherwise
-		map.addChild(key);
 		key.x = key0X;
 		key.y = key0Y;
+		map.addChild(key);
 		hasKey = false;
 		if (reason == "fail") {
 			// go back to main screen
