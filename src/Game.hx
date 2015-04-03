@@ -289,6 +289,7 @@ class Game extends Sprite{
 
 	private function level1()
 	{
+		character.me.x = 0;
 		//add in the door/key
 		door = new Image(Root.assets.getTexture('door'));
 		door.x = getSectorOffset(2, true) + 64;
@@ -310,6 +311,7 @@ class Game extends Sprite{
 
 	private function level2()
 	{
+		character.me.x = 0;
 		//add in the door/key
 		door = new Image(Root.assets.getTexture('door'));
 		door.x = getSectorOffset(3, true) + 64 + 128;
@@ -331,6 +333,7 @@ class Game extends Sprite{
 
 	private function level3()
 	{
+		character.me.x = 0;
 		//add in the door/key
 		door = new Image(Root.assets.getTexture('door'));
 		door.x = getSectorOffset(3, true) + 64 + 128;
