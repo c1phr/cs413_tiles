@@ -24,6 +24,7 @@ class Character extends Sprite {
 	
 	public function new(g: Game, initX:Float, initY:Float){
 	    super();
+		aniInit();
 		game = g;
 		me = new Image(Root.assets.getTexture('lizardani1'));
 		me.smoothing = "none";
@@ -39,18 +40,15 @@ class Character extends Sprite {
 		removeChild(playerRight);
 	}
 	
-	public function addAnimation(dir: String) {
-		var temp;
+	public function addAnimation(dir: String) {	
 		if (dir == "jump") {
-			temp.x = me.x;
-			temp.y = me.y;
-			me.removeFromParent();
-			me = jumpRight;
-			me.x = temp.x;
-			me.y = temp.y;
-			game.currentSprite.addChild(me);
-			
+			me.texture = jumpRight.texture;
+			trace(me.texture);
 		}
+	}
+	
+	public function removeAnimation() {
+		me.texture = playerRight.texture;
 	}
 	
 	public function aniInit(){

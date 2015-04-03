@@ -376,9 +376,12 @@ class Game extends Sprite{
 	private function keyUp(event:KeyboardEvent)
 	{
 		var keycode = event.keyCode;
-		if(keycode == 65 || keycode == 68){
+		if (keycode == 65 || keycode == 68) {
 			deltaX = 0;
 		}		
+		if (keycode == 32){
+			character.removeAnimation();
+		}
 	}
 	
 	public function loseLife() {
@@ -437,7 +440,6 @@ class Game extends Sprite{
 
 		// initialize sprite
 		character = new Character(this, initX, initY);
-		trace(character.me.x);
 	}
 	
 	public function initializeInv() {
