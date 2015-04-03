@@ -99,7 +99,7 @@ class Game extends Sprite{
 		
 	    //spawn the ground and level 0
 		createGroundLevels();
-		levelCredits();
+		//levelCredits();
 		level0();
 		
 		// create inv
@@ -304,8 +304,74 @@ class Game extends Sprite{
 
 		baby = new Image(Root.assets.getTexture("baby1"));
 		currentSprite.addChild(baby);
+		baby.x = 11320;
+		baby.y = 320;
+	}
+
+	private function level1()
+	{
+		//add in the door/key
+		door = new Image(Root.assets.getTexture('door'));
+		door.x = getSectorOffset(2, true) + 64;
+		door.y = (sWidth - (32*11));
+
+		key = new Image(Root.assets.getTexture('key_red'));
+		key0X = getSectorOffset(2, true) + (sWidth - (key.width * 10 ));
+		key0Y = (sWidth - (64*3));
+		key.x = key0X;
+		key.y = key0Y;
+		key.scaleX += 1;
+		key.scaleY += 1;
+
+		map.addChild(door);
+		map.addChild(key);
+
+		levelGen.generate(Levels.Level1, currentSprite);	
+	}
+
+	private function level2()
+	{
+		//add in the door/key
+		door = new Image(Root.assets.getTexture('door'));
+		door.x = getSectorOffset(3, true) + 64;
+		door.y = (sWidth - (32*11));
+
+		key = new Image(Root.assets.getTexture('key_red'));
+		key0X = getSectorOffset(3, true) + (sWidth - (key.width * 10 ));
+		key0Y = (sWidth - (64*3));
+		key.x = key0X;
+		key.y = key0Y;
+		key.scaleX += 1;
+		key.scaleY += 1;
+
+		map.addChild(door);
+		map.addChild(key);
+
+		levelGen.generate(Levels.Level2, currentSprite);	
+	}
+
+	private function level3()
+	{
+		//add in the door/key
+		door = new Image(Root.assets.getTexture('door'));
+		door.x = getSectorOffset(3, true) + 64;
+		door.y = (sWidth - (32*11));
+
+		key = new Image(Root.assets.getTexture('key_red'));
+		key0X = getSectorOffset(3, true) + (sWidth - (key.width * 10 ));
+		key0Y = (sWidth - (64*3));
+		key.x = key0X;
+		key.y = key0Y;
+		key.scaleX += 1;
+		key.scaleY += 1;
+
+		map.addChild(door);
+		map.addChild(key);
+
 		baby.x = 320;
 		baby.y = 320;
+
+		levelGen.generate(Levels.Level3, currentSprite);	
 	}
 
 	private function nextLevel(level:Int)
@@ -317,11 +383,11 @@ class Game extends Sprite{
 		character.y = initY;
 		switch(level){
 			case 1:
-				levelGen.generate(Levels.Level1, currentSprite);				
+				level1();							
 			case 2:
-				levelGen.generate(Levels.Level2, currentSprite);
+				level2();
 			case 3: 
-				levelGen.generate(Levels.Level3, currentSprite);
+				level3();
 		}
 	}
 
@@ -368,7 +434,8 @@ class Game extends Sprite{
 
 		if(keycode == 32 && !jumpLock){
 			if(character.bounds.intersects(door.getBounds(currentSprite))){
-				if(hasKey){					
+				if(hasKey){
+					hasKey = false;					
 					key.removeFromParent();
 					nextLevel(++thisLevel);
 				}
