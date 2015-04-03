@@ -136,7 +136,7 @@ class Game extends Sprite{
 		var platformTopCollision:Bool = false;
 		var platformBottomCollision:Bool = false;
 		
-
+		trace(character.me.x);
 		
 
 		// Check for collisions with platforms
@@ -196,7 +196,7 @@ class Game extends Sprite{
 		{			
 			jumpLock = false;			
 		}		
-		if(character.me.x >= 0 && character.me.x <= (sWidth - character.width)){
+		if (character.me.x >= 0 && character.me.x <= (sWidth - character.width)) {
       		character.me.x += deltaX;
 		}
 		else if(character.me.x <= 0){
@@ -209,10 +209,11 @@ class Game extends Sprite{
 		if(character.me.y >= 635){
 			character.me.y -= 80;
 		}
-
-		if(character.me.x >= (sWidth-character.width)){
-			map.x -= sWidth;
-			character.me.x = 0;			
+		
+		if (character.me.x >= (sWidth - character.width)) {
+			// can't go right
+			//map.x -= sWidth;
+			character.me.x = sWidth - character.me.width;
 		}
 		if(character.me.y >= sHeight){
 			map.y -= sHeight;
